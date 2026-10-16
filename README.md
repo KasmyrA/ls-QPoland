@@ -3,4 +3,5 @@ Nowoczesny szkielet projektu Python z układem src/, uv, Ruff, mypy, pytest i Gi
 
 
 AI was used to:
-+ generate project templaste
++ generate project templates
++ commit names
