@@ -17,17 +17,32 @@
 - **dimod `enumerate_all_samples` memory**: for the 8-job/4-machine instance (32 bits = 2³² states), dimod OOMs. Added a guard `if n_bits <= 9` in the experiment scripts to skip exact enumeration on large instances.
 
 ### What works
-- [x] `bruteforce.py` — exact optimum + energy table for any square instance
-- [x] `qubo.py` — builder, penalty sweep, decode(), energy()
-- [x] `anneal.py` — simulated annealing (dimod/neal) and exact enumeration wrapper
-- [x] `scheduler.py` — greedy LPT scheduler + Gantt HTML/SVG renderers
-- [x] `qaoa.py` — circuit builder, statevector expectation, grid search optimiser
+- [x] `bruteforce.py` — exact optimum + energy table for any **rectangular** instance (n_machines parameter added 2026-10-17)
+|- [x] `qubo.py` — builder, penalty sweep, decode(), energy()
+|- [x] `anneal.py` — simulated annealing (dimod/neal) and exact enumeration wrapper
+|- [x] `scheduler.py` — greedy LPT scheduler + Gantt HTML/SVG renderers
+|- [x] `qaoa.py` — circuit builder, statevector expectation, grid search optimiser
 
-### Next steps (not yet implemented)
-- [ ] Warm-start experiments: use annealer output as QAOA initial state
-- [ ] Noisy Aer simulation with realistic gate error rates
-- [ ] CVaR objective comparison against plain energy minimisation
-- [ ] Demo video script (`make demo`)
+|### Next steps (not yet implemented)
+|- [ ] Warm-start experiments: use annealer output as QAOA initial state
+|- [ ] Noisy Aer simulation with realistic gate error rates
+|- [ ] CVaR objective comparison against plain energy minimisation
+|- [ ] Demo video script (`make demo`)
+|
+|---
+|## 2026-10-17 — Rectangular instance support & comparison plots
+|
+|### Changes made
+|- **`bruteforce.py::solve_bruteforce()`** now accepts optional `n_machines` parameter (defaults to `n_jobs` for backward compatibility)
+|- Updated all experiment runners (`run_annealing.py`, `run_all_optimized.py`, `integration_test.py`) to pass correct `n_machines` from instance JSON
+|- Added `tests/test_bruteforce.py` with rectangular instance tests (8 jobs × 4 machines)
+|- Verified: large instance brute-force runs in **2.4s** (65,536 combinations) vs time-out before
+|
+|### Results verified experimentally
+|- small.json (3×3): makespan=4.0, 27 feasible assignments ✓
+|- medium.json (5×3): makespan=7.0, 243 feasible assignments ✓  
+|- large.json (8×4): makespan=9.0, 65,536/65,536 feasible assignments ✓ (brute-force now works)
+|
 
 ---
 
