@@ -1,0 +1,27 @@
+{
+  "instance": "large",
+  "n_jobs": 8,
+  "n_machines": 4,
+  "durations": [
+    6,
+    2,
+    8,
+    1,
+    5,
+    3,
+    7,
+    4
+  ],
+  "optimal_makespan": 8.0,
+  "n_feasible_assignments": 16777216,
+  "anneal": {
+    "best_energy": 204.0,
+    "feasibility_rate": 1.0,
+    "num_reads_per_seed": 200
+  },
+  "exact_enumeration": {
+    "n_total_samples": null,
+    "n_feasible": null,
+    "elapsed_s": null
+  }
+}
