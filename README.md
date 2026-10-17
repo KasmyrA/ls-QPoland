@@ -1,106 +1,171 @@
-# Quantum Scheduling — QUBO, Simulated Annealing & QAOA
+# Quantum Scheduling
 
-Job-shop assignment problem solved via quantum-inspired optimisation.
+Projekt demonstruje rozwiązywanie problemu **job-shop scheduling**: każde zadanie składa się z uporządkowanych operacji, a operacja wymaga wskazanej maszyny przez określony czas. Implementacja udostępnia dwa podejścia:
 
-## Architecture
+- klasyczny solver CP-SAT z Google OR-Tools, służący jako punkt odniesienia;
+- model QUBO rozwiązywany przez symulację QAOA w Qiskit.
 
-```
-┌─────────────┐     ┌──────────┐     ┌─────────────┐
-│ instance/   │────▶│  src/    │────▶│ experiments/│
-│ (JSON data) │     │ (solvers)│     │ (runs)      │
-└─────────────┘     └──────────┘     └──────┬──────┘
-                                             │
-                    ┌────────────────────────▼────────────────────────┐
-                    │                  results/                       │
-                    │  • annealing_<name>.json                        │
-                    │  • qaoa_<name>.json                             │
-                    │  • penalty_sweep_<name>.json                    │
-                    └────────────────────────┬────────────────────────┘
-                                             │
-                              make all / make demo (regenerates everything)
+Wynikiem jest harmonogram operacji oraz jego `makespan` — czas zakończenia ostatniej operacji.
+
+> Stan repozytorium: aktywna implementacja znajduje się w pakiecie [`jobshop/`](jobshop). Katalog [`controlled code/`](controlled%20code) zawiera modele I/O, przykładowe dane, wyniki i narzędzie do wykresów, ale jego testy odwołują się do nieobecnego modułu `algorithms`. Szczegóły w sekcji [Znane niespójności](#znane-niespójności).
+
+## Model problemu
+
+Dla operacji `k` zadania `j` o czasie trwania `d[j, k]` model QUBO używa zmiennej binarnej:
+
+```text
+x[j, k, t] = 1  ⇔  operacja k zadania j rozpoczyna się w chwili t
 ```
 
-**Pipeline stages:**
-1. **Define instance** — `instance/*.json` with jobs, machines, durations
-2. **Build QUBO** — `src/qubo.py` encodes feasibility + objective as binary quadratic form
-3. **Solve** — three solvers in parallel:
-   - `bruteforce.py` — exact enumeration (ground truth)
-   - `anneal.py` — simulated annealing via dimod/neal
-   - `qaoa.py` — QAOA with statevector simulation (Qiskit Aer)
-4. **Schedule** — `scheduler.py` converts assignments to Gantt charts (HTML/SVG)
+Przed utworzeniem zmiennych obliczane są najwcześniejsze i najpóźniejsze dopuszczalne starty (`ES`, `LS`), więc nie powstają zmienne poza oknem `[ES, LS]`. Macierz QUBO zawiera:
 
-## Setup
+1. karę one-hot, wymuszającą dokładnie jeden start każdej operacji;
+2. karę za naruszenie kolejności operacji w tym samym zadaniu;
+3. karę za nakładające się operacje na tej samej maszynie;
+4. koszt równy sumie czasów zakończenia ostatnich operacji zadań.
+
+Całkowita energia ma postać `H(x) = H_cost(x) + λ H_penalty(x)`. Gdy `penalty_lambda` nie zostanie podane, `jobshop.qubo_builder.calculate_sufficient_lambda()` dobiera zachowawczą wagę kary na podstawie współczynników funkcji kosztu.
+
+Schemat przepływu:
+
+```text
+instancja / InstanceData
+          │
+          ├── CP-SAT ────────────────► harmonogram referencyjny
+          │
+          └── QUBO builder ─► QAOA ─► dekoder ─► CalculationState
+```
+
+## Struktura projektu
+
+| Ścieżka | Rola |
+| --- | --- |
+| [`jobshop/models.py`](jobshop/models.py) | Encje domenowe, gotowe instancje 2×2 i 3×3 oraz loader JSON. |
+| [`jobshop/qubo_builder.py`](jobshop/qubo_builder.py) | Okna startów, budowa macierzy QUBO i dobór `λ`. |
+| [`jobshop/qubo_decoder.py`](jobshop/qubo_decoder.py) | Zamiana bitów QUBO na `CalculationState`. |
+| [`jobshop/cp_sat_solver.py`](jobshop/cp_sat_solver.py) | Dokładny solver klasyczny OR-Tools CP-SAT. |
+| [`jobshop/qaoa_solver.py`](jobshop/qaoa_solver.py) | Konwersja QUBO→Ising i QAOA na symulatorze statevector. |
+| [`jobshop/compare_solvers.py`](jobshop/compare_solvers.py) | Uruchomienie i zestawienie CP-SAT z QAOA. |
+| [`controlled code/load.py`](controlled%20code/load.py), [`save.py`](controlled%20code/save.py) | Wczytywanie instancji i zapis harmonogramu JSON. |
+| [`controlled code/plot_results.py`](controlled%20code/plot_results.py) | Generowanie wykresów Gantta z plików wynikowych. |
+| [`controlled code/resources/`](controlled%20code/resources) | Instancje 2×2, 3×3, format wyniku, przykładowe harmonogramy i wykresy. |
+
+## Wymagania i instalacja
+
+Wymagany jest Python 3.11 lub nowszy. Zależności są zdefiniowane w [`pyproject.toml`](pyproject.toml), w tym NumPy, SciPy, OR-Tools, Qiskit, Matplotlib i opcjonalny SDK VeloxQ.
+
+Najprościej użyć `uv`:
 
 ```bash
-make install       # pip install all deps
-make test          # run pytest suite
-make all           # regenerate every result from experiments/
-make demo          # show pipeline output
+uv sync
 ```
 
-## Using VeloxQ
+Alternatywnie należy zainstalować zależności wymienione w `pyproject.toml` w wybranym środowisku Pythona. Projekt nie definiuje obecnie skryptów CLI ani celu `make`.
 
-The project includes the VeloxQ Python SDK (`veloxq-sdk`). Its client reads the
-API token from the `VELOX_TOKEN` environment variable; do not put the token in
-source files, JSON instances, or command-line arguments.
+## Uruchomienie porównania solverów
 
-In PowerShell, enter the token at a hidden prompt and keep it only in the
-current terminal session:
+Po instalacji zależności uruchom porównanie dla domyślnej instancji 3×3:
 
-```powershell
-$secureToken = Read-Host "VeloxQ API token" -AsSecureString
-$env:VELOX_TOKEN = (New-Object System.Net.NetworkCredential("", $secureToken)).Password
+```bash
+uv run python -m jobshop.compare_solvers
 ```
 
-Run your Python program from that same terminal. For example:
+Wariant 2×2:
+
+```bash
+uv run python -m jobshop.compare_solvers 2x2
+```
+
+Skrypt kolejno:
+
+1. wyznacza rozwiązanie CP-SAT;
+2. buduje QUBO i podaje liczbę zmiennych binarnych;
+3. uruchamia jednowarstwowe QAOA (`reps=1`, maksymalnie 100 iteracji COBYLA);
+4. dekoduje bity do harmonogramu i wypisuje porównanie `makespan` oraz czasu działania.
+
+QAOA używa pełnego wektora stanu i enumeruje `2^N` stanów przy obliczaniu energii. Jest to demonstracja przeznaczona dla małych QUBO, nie metoda dla dużych instancji produkcyjnych. Do klasycznego, dokładnego rozwiązania użyj `solve_cp_sat`.
+
+Przykład użycia API:
 
 ```python
-import os
-from veloxq_sdk import VeloxQSolver
-
-if not os.environ.get("VELOX_TOKEN"):
-    raise RuntimeError("Set VELOX_TOKEN before using VeloxQ")
-
-solver = VeloxQSolver()
-result = solver.sample(
-    [1.0, -1.0, 0.0],
-    [[0.0, -1.0, 0.0], [-1.0, 0.0, -1.0], [0.0, -1.0, 0.0]],
+from jobshop import (
+    build_job_shop_qubo,
+    decode_qubo_solution,
+    make_test_instance,
+    solve_cp_sat,
+    solve_with_qaoa,
 )
-print(result)
+
+instance = make_test_instance("2x2")
+
+# Klasyczne rozwiązanie referencyjne
+cp_result = solve_cp_sat(instance)
+print(cp_result["makespan"])
+
+# Ścieżka QUBO + QAOA
+Q, metadata = build_job_shop_qubo(instance)
+result = solve_with_qaoa(Q, offset=metadata["offset"], reps=1, maxiter=100)
+schedule = decode_qubo_solution(result["bits"], metadata)
+print(schedule.makespan, schedule.metadata["status"])
 ```
 
-The environment variable is available to processes launched from that
-terminal, so close the session when finished or clear it with
-`Remove-Item Env:VELOX_TOKEN`. For automation, store the token in the CI
-provider's secret store and inject it as `VELOX_TOKEN`; avoid committing a
-plaintext `.env` file. Calling `solver.sample(...)` submits a problem to the
-VeloxQ service. The existing experiment scripts continue to use their local
-solvers unless explicitly changed to call this client.
+## Format danych
 
-## Rubric alignment
-
-| Item                  | Pts | How covered                                              |
-|-----------------------|-----|----------------------------------------------------------|
-| QUBO correctness      | 5   | `tests/test_qubo.py` — feasible/infeasible energy checks, penalty sweep |
-| Solution quality      | 5   | Experiments report makespan vs. brute-force optimum       |
-| Creativity & ext.     | 5   | Depth-p sweep + Gantt rendering + surrogate objective     |
-| Dev log               | 3   | LOG.md with decisions, failures, open questions            |
-| Project design        | 3   | Single `make all` regenerates everything                   |
-| Demo video            | 3   | `make demo` — cached results, pipeline stages shown       |
-| Live presentation     | 3   | Answers prepared for likely Q&A (see LOG.md open questions) |
-| Consistency           | 3   | Log ↔ code ↔ presentation agree by construction          |
-
-## Instance format
+Instancja JSON zawiera problem oraz listę zadań z uporządkowanymi operacjami:
 
 ```json
 {
-    "n_jobs": 3,
-    "n_machines": 3,
-    "durations": [4, 3, 2],
-    "description": "Small test instance"
+  "problem": "erp_scheduling",
+  "jobs": [
+    {
+      "id": "Z1",
+      "operations": [
+        { "machine": "T", "duration": 2 },
+        { "machine": "F", "duration": 1 }
+      ]
+    }
+  ]
 }
 ```
 
-## License
+Pliki przykładowe to [`instance_2x2.json`](controlled%20code/resources/instance_2x2.json) i [`instance_3x3.json`](controlled%20code/resources/instance_3x3.json). Wynik jest zapisywany jako:
 
-MIT — see LICENSE file.
+```json
+{
+  "instance": "instance_2x2",
+  "method": "Nazwa metody",
+  "makespan": 4,
+  "schedule": [
+    { "job": "Z2", "machine": "T", "start": 0, "end": 1 }
+  ]
+}
+```
+
+Pełny wzorzec znajduje się w [`output_format.json`](controlled%20code/resources/output_format.json). `CalculationState.validate()` sprawdza brak nakładania się operacji na maszynach i liczbę operacji względem instancji.
+
+## Wykres Gantta
+
+Z istniejących wyników można wygenerować wykresy PNG:
+
+```bash
+uv run python "controlled code/plot_results.py"
+```
+
+Bez argumentów skrypt przetwarza wszystkie `controlled code/resources/result_*.json` i zapisuje obrazy w `controlled code/resources/plots/`. Można przekazać własny plik oraz katalog wyjściowy:
+
+```bash
+uv run python "controlled code/plot_results.py" \
+  "controlled code/resources/result_instance_2x2.json" \
+  --output-dir /tmp/jobshop-plots
+```
+
+## Znane niespójności
+
+- `pyproject.toml` wskazuje `testpaths = ["tests"]`, lecz taki katalog nie występuje w repozytorium.
+- Istniejące testy w `controlled code/Tests/` importują `algorithms.qubo`, `algorithms.sufficient_lambda` i `algorithms.velox_solver`. Katalog `controlled code/algorithms/` nie jest obecny, więc te testy oraz `controlled code/test_velox.py` nie uruchomią się w aktualnym drzewie plików.
+- Integracja VeloxQ widoczna jedynie w tym osieroconym kodzie nie jest obecnie połączona z pakietem `jobshop/`. Zmienna `VELOX_TOKEN` byłaby potrzebna dopiero po przywróceniu tej integracji; nie zapisuj tokenu w repozytorium.
+- [`LOG.md`](LOG.md) opisuje wcześniejszą architekturę (`anneal.py`, `bruteforce.py`, `scheduler.py`), której nie ma w obecnym kodzie, i nie jest źródłem dokumentacji bieżącej implementacji.
+
+## Licencja
+
+MIT — zobacz [`LICENSE`](LICENSE).

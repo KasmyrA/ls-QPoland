@@ -1,4 +1,5 @@
-Veloxqsdk what to do
+# Let's do
+
 main app when use just give path to json or select file and calculation are made automatically : vibe coded maybe
 #guess the instances from the json file 
 comparison of algorithms
