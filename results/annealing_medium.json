@@ -10,7 +10,7 @@
     4
   ],
   "optimal_makespan": 7.0,
-  "n_feasible_assignments": 3125,
+  "n_feasible_assignments": 243,
   "anneal": {
     "best_energy": 103.0,
     "feasibility_rate": 1.0,
