@@ -11,8 +11,11 @@ dependencies = [
     "dimod>=0.12",
     "dwave-neal>=0.6",
     "qiskit>=2.5.2",
+    "qiskit-algorithms",
+    "qiskit-optimization",
     "qiskit-aer>=0.13",
     "veloxq-sdk>=1.1.0",
+    "ortools>=9.10",
     "pytest>=9.1.0",
 ]
 
