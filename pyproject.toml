@@ -12,6 +12,7 @@ dependencies = [
     "dwave-neal>=0.6",
     "qiskit>=2.5.2",
     "qiskit-aer>=0.13",
+    "veloxq-sdk>=1.1.0",
     "pytest>=9.1.0",
 ]
 

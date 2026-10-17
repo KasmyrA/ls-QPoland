@@ -38,6 +38,45 @@ make all           # regenerate every result from experiments/
 make demo          # show pipeline output
 ```
 
+## Using VeloxQ
+
+The project includes the VeloxQ Python SDK (`veloxq-sdk`). Its client reads the
+API token from the `VELOX_TOKEN` environment variable; do not put the token in
+source files, JSON instances, or command-line arguments.
+
+In PowerShell, enter the token at a hidden prompt and keep it only in the
+current terminal session:
+
+```powershell
+$secureToken = Read-Host "VeloxQ API token" -AsSecureString
+$env:VELOX_TOKEN = (New-Object System.Net.NetworkCredential("", $secureToken)).Password
+```
+
+Run your Python program from that same terminal. For example:
+
+```python
+import os
+from veloxq_sdk import VeloxQSolver
+
+if not os.environ.get("VELOX_TOKEN"):
+    raise RuntimeError("Set VELOX_TOKEN before using VeloxQ")
+
+solver = VeloxQSolver()
+result = solver.sample(
+    [1.0, -1.0, 0.0],
+    [[0.0, -1.0, 0.0], [-1.0, 0.0, -1.0], [0.0, -1.0, 0.0]],
+)
+print(result)
+```
+
+The environment variable is available to processes launched from that
+terminal, so close the session when finished or clear it with
+`Remove-Item Env:VELOX_TOKEN`. For automation, store the token in the CI
+provider's secret store and inject it as `VELOX_TOKEN`; avoid committing a
+plaintext `.env` file. Calling `solver.sample(...)` submits a problem to the
+VeloxQ service. The existing experiment scripts continue to use their local
+solvers unless explicitly changed to call this client.
+
 ## Rubric alignment
 
 | Item                  | Pts | How covered                                              |
