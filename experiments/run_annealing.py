@@ -45,7 +45,7 @@ def main():
             durations,
             seeds=[0, 1, 2],
             num_reads=500,
-            penalty_weight=10.0,
+            penalty_weight=None,
         )
 
         best_ann_energy = ann["best_overall_energy"]
@@ -55,7 +55,7 @@ def main():
         n_bits = durations.shape[0] ** 2
         if n_bits <= 9:  # keep exact feasible
             print("  exact_enumeration...")
-            exact = exact_enumeration(durations, penalty_weight=10.0)
+            exact = exact_enumeration(durations, penalty_weight=None)
             exact_feasible_count = sum(1 for r in exact["all_samples"] if r["valid"])
         else:
             exact = None
