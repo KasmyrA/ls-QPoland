@@ -12,11 +12,6 @@
   "anneal": {
     "best_energy": 29.0,
     "feasibility_rate": 1.0,
-    "num_reads_per_seed": 500
-  },
-  "exact_enumeration": {
-    "n_total_samples": 512,
-    "n_feasible": 142,
-    "elapsed_s": 0.001125079999837908
+    "num_reads_per_seed": 200
   }
 }
