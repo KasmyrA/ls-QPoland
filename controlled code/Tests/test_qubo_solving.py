@@ -139,6 +139,17 @@ class TestQUBOSolving:
         assert len(data["schedule"]) == 9  # 3 jobs * 3 ops
         assert data["makespan"] == state.makespan
 
+    def test_qubo_to_bqm_conversion(self):
+        """Test conversion of QUBO to dimod BQM required by VeloxQ SDK."""
+        from algorithms.velox_solver import qubo_to_bqm
+        inst_path = RESOURCES_DIR / "instance_2x2.json"
+        instance = load_instance(inst_path)
+        qubo_info = build_job_shop_qubo(instance, horizon=5)
+        bqm = qubo_to_bqm(qubo_info)
+        assert bqm.num_variables == qubo_info["n_vars"]
+        assert bqm.vartype == dimod.BINARY
+
+
 
 if __name__ == "__main__":
     t = TestSufficientLambda()
