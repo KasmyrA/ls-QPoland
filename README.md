@@ -1,91 +1,89 @@
 # Quantum Scheduling
 
-Projekt demonstruje rozwiązywanie problemu **job-shop scheduling**: każde zadanie składa się z uporządkowanych operacji, a operacja wymaga wskazanej maszyny przez określony czas. Implementacja udostępnia dwa podejścia:
+This project demonstrates **job-shop scheduling**: every job consists of ordered operations, and each operation requires a specific machine for a fixed duration. The repository provides two approaches:
 
-- klasyczny solver CP-SAT z Google OR-Tools, służący jako punkt odniesienia;
-- model QUBO rozwiązywany przez symulację QAOA w Qiskit.
+- a classical Google OR-Tools CP-SAT solver, used as a reference;
+- a QUBO model solved with a Qiskit QAOA simulation.
 
-Wynikiem jest harmonogram operacji oraz jego `makespan` — czas zakończenia ostatniej operacji.
+The output is an operation schedule and its `makespan` — the completion time of the final operation.
 
-> Stan repozytorium: aktywna implementacja znajduje się w pakiecie [`jobshop/`](jobshop). Katalog [`controlled code/`](controlled%20code) zawiera modele I/O, przykładowe dane, wyniki i narzędzie do wykresów, ale jego testy odwołują się do nieobecnego modułu `algorithms`. Szczegóły w sekcji [Znane niespójności](#znane-niespójności).
+> Repository status: the active implementation is in [`jobshop/`](jobshop). [`controlled code/`](controlled%20code) contains I/O models, example data, results, and the plotting utility, but its tests refer to a missing `algorithms` module. See [Known inconsistencies](#known-inconsistencies).
 
-## Model problemu
+## Problem model
 
-Dla operacji `k` zadania `j` o czasie trwania `d[j, k]` model QUBO używa zmiennej binarnej:
-
-```text
-x[j, k, t] = 1  ⇔  operacja k zadania j rozpoczyna się w chwili t
-```
-
-Przed utworzeniem zmiennych obliczane są najwcześniejsze i najpóźniejsze dopuszczalne starty (`ES`, `LS`), więc nie powstają zmienne poza oknem `[ES, LS]`. Macierz QUBO zawiera:
-
-1. karę one-hot, wymuszającą dokładnie jeden start każdej operacji;
-2. karę za naruszenie kolejności operacji w tym samym zadaniu;
-3. karę za nakładające się operacje na tej samej maszynie;
-4. koszt równy sumie czasów zakończenia ostatnich operacji zadań.
-
-Całkowita energia ma postać `H(x) = H_cost(x) + λ H_penalty(x)`. Gdy `penalty_lambda` nie zostanie podane, `jobshop.qubo_builder.calculate_sufficient_lambda()` dobiera zachowawczą wagę kary na podstawie współczynników funkcji kosztu.
-
-Schemat przepływu:
+For operation `k` of job `j`, with duration `d[j, k]`, the QUBO model uses the binary variable:
 
 ```text
-instancja / InstanceData
-          │
-          ├── CP-SAT ────────────────► harmonogram referencyjny
-          │
-          └── QUBO builder ─► QAOA ─► dekoder ─► CalculationState
+x[j, k, t] = 1  ⇔  operation k of job j starts at time t
 ```
 
-## Struktura projektu
+Before creating variables, the implementation calculates the earliest and latest valid starts (`ES`, `LS`), so variables outside the `[ES, LS]` interval are pruned. The QUBO matrix includes:
 
-| Ścieżka | Rola |
+1. a one-hot penalty that enforces exactly one start for each operation;
+2. a penalty for violating operation precedence within a job;
+3. a penalty for overlapping operations on the same machine;
+4. a cost equal to the sum of the completion times of the final operations of all jobs.
+
+The total energy is `H(x) = H_cost(x) + λ H_penalty(x)`. When `penalty_lambda` is not supplied, `jobshop.qubo_builder.calculate_sufficient_lambda()` chooses a conservative penalty weight from the cost-function coefficients.
+
+```text
+instance / InstanceData
+          │
+          ├── CP-SAT ────────────────► reference schedule
+          │
+          └── QUBO builder ─► QAOA ─► decoder ─► CalculationState
+```
+
+## Project structure
+
+| Path | Purpose |
 | --- | --- |
-| [`jobshop/models.py`](jobshop/models.py) | Encje domenowe, gotowe instancje 2×2 i 3×3 oraz loader JSON. |
-| [`jobshop/qubo_builder.py`](jobshop/qubo_builder.py) | Okna startów, budowa macierzy QUBO i dobór `λ`. |
-| [`jobshop/qubo_decoder.py`](jobshop/qubo_decoder.py) | Zamiana bitów QUBO na `CalculationState`. |
-| [`jobshop/cp_sat_solver.py`](jobshop/cp_sat_solver.py) | Dokładny solver klasyczny OR-Tools CP-SAT. |
-| [`jobshop/qaoa_solver.py`](jobshop/qaoa_solver.py) | Konwersja QUBO→Ising i QAOA na symulatorze statevector. |
-| [`jobshop/compare_solvers.py`](jobshop/compare_solvers.py) | Uruchomienie i zestawienie CP-SAT z QAOA. |
-| [`controlled code/load.py`](controlled%20code/load.py), [`save.py`](controlled%20code/save.py) | Wczytywanie instancji i zapis harmonogramu JSON. |
-| [`controlled code/plot_results.py`](controlled%20code/plot_results.py) | Generowanie wykresów Gantta z plików wynikowych. |
-| [`controlled code/resources/`](controlled%20code/resources) | Instancje 2×2, 3×3, format wyniku, przykładowe harmonogramy i wykresy. |
+| [`jobshop/models.py`](jobshop/models.py) | Domain entities, built-in 2×2 and 3×3 instances, and a JSON loader. |
+| [`jobshop/qubo_builder.py`](jobshop/qubo_builder.py) | Start windows, QUBO construction, and `λ` selection. |
+| [`jobshop/qubo_decoder.py`](jobshop/qubo_decoder.py) | Converts QUBO bits into a `CalculationState`. |
+| [`jobshop/cp_sat_solver.py`](jobshop/cp_sat_solver.py) | Exact classical OR-Tools CP-SAT solver. |
+| [`jobshop/qaoa_solver.py`](jobshop/qaoa_solver.py) | QUBO-to-Ising conversion and statevector QAOA. |
+| [`jobshop/compare_solvers.py`](jobshop/compare_solvers.py) | Runs and compares CP-SAT and QAOA. |
+| [`controlled code/load.py`](controlled%20code/load.py), [`save.py`](controlled%20code/save.py) | Load instances and save schedules as JSON. |
+| [`controlled code/plot_results.py`](controlled%20code/plot_results.py) | Generates Gantt charts from result JSON files. |
+| [`controlled code/resources/`](controlled%20code/resources) | 2×2 and 3×3 instances, output schema, example schedules, and plots. |
 
-## Wymagania i instalacja
+## Requirements and installation
 
-Wymagany jest Python 3.11 lub nowszy. Zależności są zdefiniowane w [`pyproject.toml`](pyproject.toml), w tym NumPy, SciPy, OR-Tools, Qiskit, Matplotlib i opcjonalny SDK VeloxQ.
+Python 3.11 or newer is required. Dependencies are defined in [`pyproject.toml`](pyproject.toml), including NumPy, SciPy, OR-Tools, Qiskit, Matplotlib, and the VeloxQ SDK.
 
-Najprościej użyć `uv`:
+The simplest setup uses `uv`:
 
 ```bash
 uv sync
 ```
 
-Alternatywnie należy zainstalować zależności wymienione w `pyproject.toml` w wybranym środowisku Pythona. Projekt nie definiuje obecnie skryptów CLI ani celu `make`.
+Alternatively, install the dependencies listed in `pyproject.toml` in your chosen Python environment. The project currently defines no CLI scripts or `make` targets.
 
-## Uruchomienie porównania solverów
+## Running the solver comparison
 
-Po instalacji zależności uruchom porównanie dla domyślnej instancji 3×3:
+After installing dependencies, run the comparison using the default 3×3 instance:
 
 ```bash
 uv run python -m jobshop.compare_solvers
 ```
 
-Wariant 2×2:
+For the 2×2 instance:
 
 ```bash
 uv run python -m jobshop.compare_solvers 2x2
 ```
 
-Skrypt kolejno:
+The script:
 
-1. wyznacza rozwiązanie CP-SAT;
-2. buduje QUBO i podaje liczbę zmiennych binarnych;
-3. uruchamia jednowarstwowe QAOA (`reps=1`, maksymalnie 100 iteracji COBYLA);
-4. dekoduje bity do harmonogramu i wypisuje porównanie `makespan` oraz czasu działania.
+1. obtains a CP-SAT solution;
+2. builds a QUBO and reports its number of binary variables;
+3. runs one-layer QAOA (`reps=1`, at most 100 COBYLA iterations);
+4. decodes the bits into a schedule and prints the `makespan` and runtime comparison.
 
-QAOA używa pełnego wektora stanu i enumeruje `2^N` stanów przy obliczaniu energii. Jest to demonstracja przeznaczona dla małych QUBO, nie metoda dla dużych instancji produkcyjnych. Do klasycznego, dokładnego rozwiązania użyj `solve_cp_sat`.
+QAOA uses a full statevector and enumerates `2^N` states when calculating energies. It is therefore a demonstration for small QUBOs, rather than a method for large production instances. Use `solve_cp_sat` for an exact classical solution.
 
-Przykład użycia API:
+API example:
 
 ```python
 from jobshop import (
@@ -98,20 +96,20 @@ from jobshop import (
 
 instance = make_test_instance("2x2")
 
-# Klasyczne rozwiązanie referencyjne
+# Classical reference solution
 cp_result = solve_cp_sat(instance)
 print(cp_result["makespan"])
 
-# Ścieżka QUBO + QAOA
+# QUBO + QAOA path
 Q, metadata = build_job_shop_qubo(instance)
 result = solve_with_qaoa(Q, offset=metadata["offset"], reps=1, maxiter=100)
 schedule = decode_qubo_solution(result["bits"], metadata)
 print(schedule.makespan, schedule.metadata["status"])
 ```
 
-## Format danych
+## Data format
 
-Instancja JSON zawiera problem oraz listę zadań z uporządkowanymi operacjami:
+An instance JSON file contains a problem and a list of jobs with ordered operations:
 
 ```json
 {
@@ -128,12 +126,12 @@ Instancja JSON zawiera problem oraz listę zadań z uporządkowanymi operacjami:
 }
 ```
 
-Pliki przykładowe to [`instance_2x2.json`](controlled%20code/resources/instance_2x2.json) i [`instance_3x3.json`](controlled%20code/resources/instance_3x3.json). Wynik jest zapisywany jako:
+See [`instance_2x2.json`](controlled%20code/resources/instance_2x2.json) and [`instance_3x3.json`](controlled%20code/resources/instance_3x3.json) for complete examples. A result is saved in this form:
 
 ```json
 {
   "instance": "instance_2x2",
-  "method": "Nazwa metody",
+  "method": "Method name",
   "makespan": 4,
   "schedule": [
     { "job": "Z2", "machine": "T", "start": 0, "end": 1 }
@@ -141,17 +139,17 @@ Pliki przykładowe to [`instance_2x2.json`](controlled%20code/resources/instance
 }
 ```
 
-Pełny wzorzec znajduje się w [`output_format.json`](controlled%20code/resources/output_format.json). `CalculationState.validate()` sprawdza brak nakładania się operacji na maszynach i liczbę operacji względem instancji.
+The complete schema is available in [`output_format.json`](controlled%20code/resources/output_format.json). `CalculationState.validate()` checks machine overlaps and operation counts against the instance.
 
-## Wykres Gantta
+## Gantt charts
 
-Z istniejących wyników można wygenerować wykresy PNG:
+Generate PNG charts from the existing result files:
 
 ```bash
 uv run python "controlled code/plot_results.py"
 ```
 
-Bez argumentów skrypt przetwarza wszystkie `controlled code/resources/result_*.json` i zapisuje obrazy w `controlled code/resources/plots/`. Można przekazać własny plik oraz katalog wyjściowy:
+With no arguments, the script processes every `controlled code/resources/result_*.json` file and saves images in `controlled code/resources/plots/`. To pass a custom result file and output directory:
 
 ```bash
 uv run python "controlled code/plot_results.py" \
@@ -159,13 +157,13 @@ uv run python "controlled code/plot_results.py" \
   --output-dir /tmp/jobshop-plots
 ```
 
-## Znane niespójności
+## Known inconsistencies
 
-- `pyproject.toml` wskazuje `testpaths = ["tests"]`, lecz taki katalog nie występuje w repozytorium.
-- Istniejące testy w `controlled code/Tests/` importują `algorithms.qubo`, `algorithms.sufficient_lambda` i `algorithms.velox_solver`. Katalog `controlled code/algorithms/` nie jest obecny, więc te testy oraz `controlled code/test_velox.py` nie uruchomią się w aktualnym drzewie plików.
-- Integracja VeloxQ widoczna jedynie w tym osieroconym kodzie nie jest obecnie połączona z pakietem `jobshop/`. Zmienna `VELOX_TOKEN` byłaby potrzebna dopiero po przywróceniu tej integracji; nie zapisuj tokenu w repozytorium.
-- [`LOG.md`](LOG.md) opisuje wcześniejszą architekturę (`anneal.py`, `bruteforce.py`, `scheduler.py`), której nie ma w obecnym kodzie, i nie jest źródłem dokumentacji bieżącej implementacji.
+- `pyproject.toml` sets `testpaths = ["tests"]`, but no such directory exists in the repository.
+- The tests in `controlled code/Tests/` import `algorithms.qubo`, `algorithms.sufficient_lambda`, and `algorithms.velox_solver`. The `controlled code/algorithms/` directory is absent, so these tests and `controlled code/test_velox.py` cannot run in the current tree.
+- The VeloxQ integration exists only in that orphaned code and is not connected to the `jobshop/` package. `VELOX_TOKEN` would be required only after restoring that integration; do not store the token in the repository.
+- [`LOG.md`](LOG.md) documents an older architecture (`anneal.py`, `bruteforce.py`, and `scheduler.py`) that is not present in the current codebase, and should not be treated as current implementation documentation.
 
-## Licencja
+## License
 
-MIT — zobacz [`LICENSE`](LICENSE).
+MIT — see [`LICENSE`](LICENSE).
