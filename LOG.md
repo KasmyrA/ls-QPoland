@@ -44,6 +44,46 @@
 |- large.json (8×4): makespan=9.0, 65,536/65,536 feasible assignments ✓ (brute-force now works)
 |
 
+## Theoretical Derivation: Sufficient Penalty Multiplier (\lambda) in QUBO
+
+When translating a constrained discrete optimization problem to an unconstrained QUBO (Quadratic Unconstrained Binary Optimization), the Hamiltonian is constructed as:
+
+$$H(x) = H_{\text{cost}}(x) + \lambda \cdot H_{\text{penalty}}(x)$$
+
+where $x \in \{0, 1\}^n$ is the binary decision vector, and:
+- $H_{\text{cost}}(x) = \sum_{i} a_i x_i + \sum_{i < j} b_{ij} x_i x_j$ represents the objective function to minimize.
+- $H_{\text{penalty}}(x) \ge 0$ is a non-negative penalty term satisfying:
+  $$H_{\text{penalty}}(x) = 0 \iff x \in \mathcal{F} \quad (\text{feasible subspace})$$
+  $$H_{\text{penalty}}(x) \ge \delta > 0 \iff x \notin \mathcal{F} \quad (\text{infeasible subspace})$$
+  where $\delta = \min_{x \notin \mathcal{F}} H_{\text{penalty}}(x)$ is the minimal non-zero violation penalty gap (for typical quadratic integer penalties, $\delta = 1$).
+
+### Derivation:
+To guarantee that the global minimum of $H(x)$ strictly lies within the feasible space $\mathcal{F}$, every feasible configuration $x_{\text{feas}} \in \mathcal{F}$ must have strictly lower energy than any infeasible configuration $x_{\text{inf}} \notin \mathcal{F}$:
+
+$$H(x_{\text{feas}}) < H(x_{\text{inf}}) \quad \forall x_{\text{feas}} \in \mathcal{F}, x_{\text{inf}} \notin \mathcal{F}$$
+
+Substituting $H_{\text{penalty}}(x_{\text{feas}}) = 0$:
+
+$$H_{\text{cost}}(x_{\text{feas}}) < H_{\text{cost}}(x_{\text{inf}}) + \lambda \cdot H_{\text{penalty}}(x_{\text{inf}})$$
+
+$$\lambda \cdot H_{\text{penalty}}(x_{\text{inf}}) > H_{\text{cost}}(x_{\text{feas}}) - H_{\text{cost}}(x_{\text{inf}})$$
+
+Since $H_{\text{penalty}}(x_{\text{inf}}) \ge \delta$, a sufficient condition that holds for all pairs $(x_{\text{feas}}, x_{\text{inf}})$ is:
+
+$$\lambda \cdot \delta > \max_{x, x' \in \{0, 1\}^n} \left( H_{\text{cost}}(x) - H_{\text{cost}}(x') \right)$$
+
+The maximum possible variation of the cost function across all binary states $\{0, 1\}^n$ is bounded by the sum of absolute values of its linear and quadratic coefficients:
+
+$$\max_{x, x'} |H_{\text{cost}}(x) - H_{\text{cost}}(x')| \le \sum_{i} |a_i| + \sum_{i < j} |b_{ij}|$$
+
+Dividing both sides by the minimal violation gap $\delta > 0$, we arrive at the guaranteed sufficient bound:
+
+\[
+\boxed{
+\lambda > \frac{\sum_i |a_i| + \sum_{i < j} |b_{ij}|}{\delta}
+}
+\]
+
 ---
 
 ## Open questions
@@ -55,3 +95,4 @@
    Currently machines have no capacity limit. If the rubric expects a more realistic model, each machine could have a max load → extra penalty terms. Not done yet — keeping scope tight for the extension point.
 
 3. **Leap hybrid solver** — kept optional per user's note about caching results. Would need an API key and rate-limit handling.
+
