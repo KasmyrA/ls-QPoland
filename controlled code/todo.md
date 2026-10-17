@@ -12,3 +12,4 @@ Report how many variables it costs in the naive time-indexed formulation and in 
 Also report your smallest correct QUBO for the baseline 3×3 instance (reference: 72 variables in the plain time-indexed formulation at H = 8; simple start-window pruning already gives 39), so teams with different models can be compared
 A polished engineering and presentation layer (interactive Gantt chart, end-to-end pipeline) earns credit when it showcases a strong extension, but it cannot stand in for one.
 select your scheduling T->F->S, read file find unique and make a list from that? something like this
+additional quantum hardware?

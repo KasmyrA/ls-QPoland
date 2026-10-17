@@ -124,43 +124,38 @@ def build_job_shop_qubo(
     Q_pen = np.zeros((n_vars, n_vars), dtype=float)
     offset_pen = 0.0
 
-    # 2. Constraint 1: Exactly one start time per operation: (sum_t x_{(j,k),t} - 1)^2
+    # 2. Constraint 1 (Vectorized): Exactly one start time per operation (sum_t x_t - 1)^2
     for job in instance.jobs:
         for k, op in enumerate(job.operations):
             es, ls = windows[(job.id, k)]
-            times = [var_map[(job.id, k, t)] for t in range(es, ls + 1)]
+            times = np.array([var_map[(job.id, k, t)] for t in range(es, ls + 1)], dtype=int)
 
-            # Diagonal: sum_t x_t^2 - 2 sum_t x_t = -sum_t x_t (since x^2 = x)
-            for v in times:
-                Q_pen[v, v] -= 1.0
-
-            # Off-diagonal: 2 * sum_{t < t'} x_t x_{t'}
-            for i_idx, v1 in enumerate(times):
-                for v2 in times[i_idx + 1 :]:
-                    Q_pen[v1, v2] += 1.0
-                    Q_pen[v2, v1] += 1.0
-
-            # Constant offset (+1 for each operation)
+            # Block assignment for (sum x - 1)^2:
+            # All elements in block get +1.0, then subtract 2.0 from diagonal (so diag is -1.0)
+            Q_pen[np.ix_(times, times)] += 1.0
+            Q_pen[times, times] -= 2.0
             offset_pen += 1.0
 
-    # 3. Constraint 2: Operation Precedence within each job
+    # 3. Constraint 2 (Vectorized): Operation Precedence within each job
     for job in instance.jobs:
         for k in range(len(job.operations) - 1):
             op_k = job.operations[k]
             es_k, ls_k = windows[(job.id, k)]
             es_next, ls_next = windows[(job.id, k + 1)]
 
-            for t_k in range(es_k, ls_k + 1):
-                v_k = var_map[(job.id, k, t_k)]
-                for t_next in range(es_next, ls_next + 1):
-                    # Infeasible if next op starts before op_k finishes
-                    if t_next < t_k + op_k.duration:
-                        v_next = var_map[(job.id, k + 1, t_next)]
-                        Q_pen[v_k, v_next] += 0.5
-                        Q_pen[v_next, v_k] += 0.5
+            # 2D broadcast condition: violation if next op starts before current finishes
+            t_k = np.arange(es_k, ls_k + 1)[:, None]
+            t_next = np.arange(es_next, ls_next + 1)[None, :]
+            violation_mask = (t_next < t_k + op_k.duration).astype(float)
 
-    # 4. Constraint 3: Machine Resource Non-Overlap
-    # Group operations by machine
+            v_k = np.array([var_map[(job.id, k, t)] for t in range(es_k, ls_k + 1)], dtype=int)
+            v_next = np.array([var_map[(job.id, k + 1, t)] for t in range(es_next, ls_next + 1)], dtype=int)
+
+            # Symmetrized block update
+            Q_pen[np.ix_(v_k, v_next)] += 0.5 * violation_mask
+            Q_pen[np.ix_(v_next, v_k)] += 0.5 * violation_mask.T
+
+    # 4. Constraint 3 (Vectorized): Machine Resource Non-Overlap
     machine_ops: dict[str, list[tuple[str, int, int]]] = {}
     for job in instance.jobs:
         for k, op in enumerate(job.operations):
@@ -171,32 +166,31 @@ def build_job_shop_qubo(
         for i in range(n_m_ops):
             j1, k1, d1 = ops_list[i]
             es1, ls1 = windows[(j1, k1)]
+            v1_arr = np.array([var_map[(j1, k1, t)] for t in range(es1, ls1 + 1)], dtype=int)
+            t1_arr = np.arange(es1, ls1 + 1)[:, None]
+
             for j in range(i + 1, n_m_ops):
                 j2, k2, d2 = ops_list[j]
                 es2, ls2 = windows[(j2, k2)]
+                v2_arr = np.array([var_map[(j2, k2, t)] for t in range(es2, ls2 + 1)], dtype=int)
+                t2_arr = np.arange(es2, ls2 + 1)[None, :]
 
-                # Compare all time pairs
-                for t1 in range(es1, ls1 + 1):
-                    v1 = var_map[(j1, k1, t1)]
-                    for t2 in range(es2, ls2 + 1):
-                        v2 = var_map[(j2, k2, t2)]
-                        # Overlap condition: max(t1, t2) < min(t1 + d1, t2 + d2)
-                        if max(t1, t2) < min(t1 + d1, t2 + d2):
-                            Q_pen[v1, v2] += 0.5
-                            Q_pen[v2, v1] += 0.5
+                # 2D broadcast overlap condition: max(t1, t2) < min(t1 + d1, t2 + d2)
+                overlap_mask = (np.maximum(t1_arr, t2_arr) < np.minimum(t1_arr + d1, t2_arr + d2)).astype(float)
 
-    # 5. Objective H_cost: Minimize completion time of the last operation of each job
+                Q_pen[np.ix_(v1_arr, v2_arr)] += 0.5 * overlap_mask
+                Q_pen[np.ix_(v2_arr, v1_arr)] += 0.5 * overlap_mask.T
+
+    # 5. Objective H_cost (Vectorized): Minimize completion time of the last operation of each job
     for job in instance.jobs:
         if not job.operations:
             continue
         last_k = len(job.operations) - 1
         last_op = job.operations[last_k]
         es, ls = windows[(job.id, last_k)]
-        for t in range(es, ls + 1):
-            v = var_map[(job.id, last_k, t)]
-            completion_time = t + last_op.duration
-            # Linear cost: diagonal Q[v, v]
-            Q_cost[v, v] += float(completion_time)
+        t_vals = np.arange(es, ls + 1)
+        v_indices = np.array([var_map[(job.id, last_k, t)] for t in t_vals], dtype=int)
+        Q_cost[v_indices, v_indices] += (t_vals + last_op.duration).astype(float)
 
     # 6. Compute Sufficient Lambda if not provided
     if penalty_lambda is None:
@@ -270,7 +264,7 @@ def solve_qubo(
     """Find the ground-state solution of the Job-Shop QUBO.
 
     Enumerates valid start-time configurations over the pruned search space,
-    evaluating the QUBO energy x^T Q x + offset to find the exact minimum.
+    evaluating QUBO energy via fast submatrix summation.
     """
     Q = qubo_info["Q"]
     offset = qubo_info["offset"]
@@ -286,24 +280,21 @@ def solve_qubo(
             var_indices = [var_map[(job.id, k, t)] for t in range(es, ls + 1)]
             op_choices.append(var_indices)
 
-    best_bits = None
+    best_choice = None
     best_energy = float("inf")
 
-    # Evaluate each combination of one start time per operation
+    # Fast submatrix summation: x^T Q x == sum_{i in choice, j in choice} Q[i, j]
     for choice in itertools.product(*op_choices):
-        x = np.zeros(n_vars, dtype=float)
-        for var_idx in choice:
-            x[var_idx] = 1.0
-
-        # Energy: x^T Q x + offset
-        energy = float(x @ Q @ x) + offset
+        idx = np.array(choice, dtype=int)
+        energy = float(Q[np.ix_(idx, idx)].sum()) + offset
 
         if energy < best_energy:
             best_energy = energy
-            best_bits = x
+            best_choice = choice
 
-    if best_bits is None:
-        best_bits = np.zeros(n_vars)
+    best_bits = np.zeros(n_vars, dtype=float)
+    if best_choice is not None:
+        best_bits[list(best_choice)] = 1.0
 
     state = decode_qubo_solution(best_bits, qubo_info, instance, method_name=method_name)
     state.metadata["energy"] = best_energy
