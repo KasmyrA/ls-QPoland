@@ -66,6 +66,10 @@ def compute_start_windows(instance: InstanceData, horizon: int) -> dict[tuple[st
         for k in range(n_ops):
             es = es_list[k]
             ls = max(es, ls_list[k])
+            if es > ls:
+                raise ValueError(
+                    f"Job {job.id}, operation {k} cannot fit in horizon {horizon}"
+                )
             windows[(job.id, k)] = (es, ls)
 
     return windows
@@ -109,6 +113,7 @@ def build_job_shop_qubo(
     inv_var_map: dict[int, tuple[str, int, int]] = {}
     var_idx = 0
 
+    #xj,k,t = 1 if operation k of job j starts at time t
     for job in instance.jobs:
         for k, op in enumerate(job.operations):
             es, ls = windows[(job.id, k)]
