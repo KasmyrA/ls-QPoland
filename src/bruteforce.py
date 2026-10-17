@@ -51,9 +51,17 @@ def compute_completion_times(
 
 
 def solve_bruteforce(
-    durations: np.ndarray, penalty_weight: float | None = None
+    durations: np.ndarray,
+    penalty_weight: float | None = None,
+    n_machines: int | None = None,
 ) -> dict:
     """Enumerate all assignments and return the optimum.
+
+    Parameters
+    ----------
+    durations : (n_jobs,) array of processing times.
+    penalty_weight : optional weight for penalty terms (unused here).
+    n_machines : number of machines; defaults to len(durations) if None.
 
     Returns a dictionary with:
       - optimal_assignment: best one-hot matrix
@@ -61,8 +69,9 @@ def solve_bruteforce(
       - energy_table:       list of (makespan, bitstring_flat, valid) tuples
     """
     n_jobs = durations.shape[0]
-    # assume square for simplicity; extend as needed
-    n_machines = n_jobs
+    if n_machines is None:
+        # assume square for backward compatibility
+        n_machines = n_jobs
 
     best_makespan = float("inf")
     best_assignment = None

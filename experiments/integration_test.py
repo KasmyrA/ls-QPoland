@@ -33,9 +33,9 @@ def main():
     inst = load_instance(inst_path)
     durations = inst["durations"]
 
-    # Brute-force baseline
+    # Brute-force baseline (with correct n_machines)
     print("  bruteforce...")
-    brute = solve_bruteforce(durations)
+    brute = solve_bruteforce(durations, n_machines=inst["n_machines"])
     optimal_makespan = brute["optimal_makespan"]
     n_feasible = brute["n_feasible"]
     print(f"  → optimal makespan: {optimal_makespan}, feasible: {n_feasible}")

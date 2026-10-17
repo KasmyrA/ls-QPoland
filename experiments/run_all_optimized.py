@@ -36,7 +36,7 @@ def main():
         if len(durations) <= 5:
             from src.bruteforce import solve_bruteforce
             print("  brute...")
-            brute = solve_bruteforce(durations)
+            brute = solve_bruteforce(durations, n_machines=inst["n_machines"])
             optimal_makespan = brute["optimal_makespan"]
             n_feasible = brute["n_feasible"]
             print(f"  → makespan: {optimal_makespan}, feasible: {n_feasible}")
