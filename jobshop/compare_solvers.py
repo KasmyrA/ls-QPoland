@@ -112,7 +112,7 @@ def run_comparison(instance):
 
 if __name__ == "__main__":
     # Default to 2x2 test instance
-    size = sys.argv[1] if len(sys.argv) > 1 else "2x2"
+    size = sys.argv[1] if len(sys.argv) > 1 else "3x3"
     instance = make_test_instance(size=size)
 
     run_comparison(instance)
