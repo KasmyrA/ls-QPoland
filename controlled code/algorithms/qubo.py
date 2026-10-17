@@ -96,12 +96,11 @@ def build_job_shop_qubo(
         Dictionary containing Q matrix, offset, variable maps, and metadata.
     """
     if horizon is None:
-        total_dur = sum(op.duration for j in instance.jobs for op in j.operations)
-        # Safe tight horizon for small instances
-        if instance.n_jobs <= 2:
-            horizon = max(5, total_dur)
-        else:
-            horizon = max(8, total_dur)
+        horizon = sum(
+            op.duration
+            for job in instance.jobs
+            for op in job.operations
+        )
 
     windows = compute_start_windows(instance, horizon)
 
