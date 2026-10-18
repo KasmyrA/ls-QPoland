@@ -1,0 +1,1 @@
+{"time_unit":"h","machines":{"T":{"count":2,"max_work":6,"min_rest":3},"F":{"count":2},"S":{"count":3,"max_work":8,"min_rest":2},"M":{"count":2}},"duration_overrides":{"Z4/1":{"F":2,"S":3}}}

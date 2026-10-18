@@ -36,8 +36,8 @@
         {
             "job": "Z2",
             "machine": "S",
-            "start": 3,
-            "end": 4
+            "start": 4,
+            "end": 5
         },
         {
             "job": "Z3",

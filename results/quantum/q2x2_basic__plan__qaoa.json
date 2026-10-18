@@ -1,0 +1,31 @@
+{
+    "instance": "q2x2_basic",
+    "method": "QAOA (state-vector simulator), plan",
+    "makespan": 4,
+    "schedule": [
+        {
+            "job": "Z2",
+            "machine": "T",
+            "start": 0,
+            "end": 1
+        },
+        {
+            "job": "Z1",
+            "machine": "T",
+            "start": 1,
+            "end": 3
+        },
+        {
+            "job": "Z2",
+            "machine": "F",
+            "start": 1,
+            "end": 3
+        },
+        {
+            "job": "Z1",
+            "machine": "F",
+            "start": 3,
+            "end": 4
+        }
+    ]
+}

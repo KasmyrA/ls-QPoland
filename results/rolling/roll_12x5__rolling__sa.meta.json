@@ -1,0 +1,16 @@
+{
+  "group": "rolling",
+  "case": "roll_12x5",
+  "mode": "rolling",
+  "solver": "sa",
+  "objective": "sum_completion",
+  "reference_cost": 283,
+  "n_vars": null,
+  "status": "ok",
+  "cost": 397,
+  "violations": 0,
+  "gap_pct": 40.3,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 187.3
+}

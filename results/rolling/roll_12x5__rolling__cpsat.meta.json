@@ -1,0 +1,16 @@
+{
+  "group": "rolling",
+  "case": "roll_12x5",
+  "mode": "rolling",
+  "solver": "cpsat",
+  "objective": "sum_completion",
+  "reference_cost": 283,
+  "n_vars": null,
+  "status": "ok",
+  "cost": 323,
+  "violations": 0,
+  "gap_pct": 14.1,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 2.7
+}

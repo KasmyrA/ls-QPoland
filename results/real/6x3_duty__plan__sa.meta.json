@@ -1,0 +1,16 @@
+{
+  "group": "real",
+  "case": "6x3_duty",
+  "mode": "plan",
+  "solver": "sa",
+  "objective": "makespan",
+  "reference_cost": 11,
+  "n_vars": 276,
+  "status": "ok",
+  "cost": 11,
+  "violations": 0,
+  "gap_pct": 0.0,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 10.3
+}

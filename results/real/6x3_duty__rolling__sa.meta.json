@@ -1,0 +1,16 @@
+{
+  "group": "real",
+  "case": "6x3_duty",
+  "mode": "rolling",
+  "solver": "sa",
+  "objective": "makespan",
+  "reference_cost": 11,
+  "n_vars": null,
+  "status": "ok",
+  "cost": 14,
+  "violations": 0,
+  "gap_pct": 27.3,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 11.3
+}

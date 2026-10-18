@@ -1,0 +1,11 @@
+{
+  "group": "real",
+  "case": "6x3_duty",
+  "mode": "plan",
+  "solver": "veloxq",
+  "objective": "makespan",
+  "reference_cost": 11,
+  "status": "error",
+  "error": "HTTPStatusError: Client error '401 User cannot access this solver' for url 'https://api.veloxq.com/jobs'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+  "time_s": 0.6
+}

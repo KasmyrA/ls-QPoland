@@ -1,0 +1,231 @@
+{
+    "instance": "8x4_breakdown",
+    "method": "CP-SAT (OR-Tools), reschedule",
+    "makespan": 20,
+    "schedule": [
+        {
+            "job": "Z6",
+            "machine": "T",
+            "start": 0,
+            "end": 2,
+            "unit": "T2"
+        },
+        {
+            "job": "Z8",
+            "machine": "T",
+            "start": 0,
+            "end": 1,
+            "unit": "T1"
+        },
+        {
+            "job": "Z2",
+            "machine": "T",
+            "start": 1,
+            "end": 3,
+            "unit": "T1"
+        },
+        {
+            "job": "Z8",
+            "machine": "F",
+            "start": 1,
+            "end": 4,
+            "unit": "F1"
+        },
+        {
+            "job": "Z2",
+            "machine": "F",
+            "start": 3,
+            "end": 5,
+            "unit": "F2"
+        },
+        {
+            "job": "Z3",
+            "machine": "T",
+            "start": 3,
+            "end": 5,
+            "unit": "T1"
+        },
+        {
+            "job": "Z7",
+            "machine": "T",
+            "start": 3,
+            "end": 7,
+            "unit": "T2"
+        },
+        {
+            "job": "Z6",
+            "machine": "F",
+            "start": 4,
+            "end": 6,
+            "unit": "F1"
+        },
+        {
+            "job": "Z8",
+            "machine": "S",
+            "start": 4,
+            "end": 8,
+            "unit": "S3"
+        },
+        {
+            "job": "Z2",
+            "machine": "S",
+            "start": 5,
+            "end": 9,
+            "unit": "S2"
+        },
+        {
+            "job": "Z3",
+            "machine": "F",
+            "start": 5,
+            "end": 9,
+            "unit": "F2"
+        },
+        {
+            "job": "Z7",
+            "machine": "F",
+            "start": 7,
+            "end": 9,
+            "unit": "F1"
+        },
+        {
+            "job": "Z1",
+            "machine": "T",
+            "start": 8,
+            "end": 10,
+            "unit": "T1"
+        },
+        {
+            "job": "Z8",
+            "machine": "M",
+            "start": 8,
+            "end": 10,
+            "unit": "M1"
+        },
+        {
+            "job": "Z2",
+            "machine": "M",
+            "start": 9,
+            "end": 13,
+            "unit": "M2"
+        },
+        {
+            "job": "Z3",
+            "machine": "S",
+            "start": 9,
+            "end": 12,
+            "unit": "S3"
+        },
+        {
+            "job": "Z7",
+            "machine": "S",
+            "start": 9,
+            "end": 12,
+            "unit": "S1"
+        },
+        {
+            "job": "Z1",
+            "machine": "F",
+            "start": 10,
+            "end": 11,
+            "unit": "F2"
+        },
+        {
+            "job": "Z4",
+            "machine": "T",
+            "start": 10,
+            "end": 13,
+            "unit": "T2"
+        },
+        {
+            "job": "Z5",
+            "machine": "T",
+            "start": 10,
+            "end": 13,
+            "unit": "T1"
+        },
+        {
+            "job": "Z1",
+            "machine": "S",
+            "start": 11,
+            "end": 15,
+            "unit": "S2"
+        },
+        {
+            "job": "Z6",
+            "machine": "S",
+            "start": 12,
+            "end": 15,
+            "unit": "S1"
+        },
+        {
+            "job": "Z7",
+            "machine": "M",
+            "start": 12,
+            "end": 15,
+            "unit": "M1"
+        },
+        {
+            "job": "Z3",
+            "machine": "M",
+            "start": 13,
+            "end": 17,
+            "unit": "M2"
+        },
+        {
+            "job": "Z5",
+            "machine": "F",
+            "start": 13,
+            "end": 15,
+            "unit": "F2"
+        },
+        {
+            "job": "Z4",
+            "machine": "F",
+            "start": 14,
+            "end": 16,
+            "unit": "F1"
+        },
+        {
+            "job": "Z5",
+            "machine": "S",
+            "start": 15,
+            "end": 17,
+            "unit": "S2"
+        },
+        {
+            "job": "Z6",
+            "machine": "M",
+            "start": 15,
+            "end": 17,
+            "unit": "M1"
+        },
+        {
+            "job": "Z4",
+            "machine": "S",
+            "start": 16,
+            "end": 19,
+            "unit": "S3"
+        },
+        {
+            "job": "Z1",
+            "machine": "M",
+            "start": 17,
+            "end": 20,
+            "unit": "M2"
+        },
+        {
+            "job": "Z5",
+            "machine": "M",
+            "start": 17,
+            "end": 19,
+            "unit": "M1"
+        },
+        {
+            "job": "Z4",
+            "machine": "M",
+            "start": 19,
+            "end": 20,
+            "unit": "M1"
+        }
+    ]
+}

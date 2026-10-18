@@ -42,7 +42,7 @@ def main():
     os.environ["VELOX_TOKEN"] = clean_token
 
     print(">>> Loading instance_2x2.json...")
-    inst_path = root_dir / "resources" / "instance_2x2.json"
+    inst_path = root_dir / "resources" / "instance_3x3.json"
     instance = load_instance(inst_path)
 
     print(f">>> Problem: {instance.instance_name} with {instance.n_jobs} jobs on machines {instance.machines}")
@@ -53,7 +53,7 @@ def main():
             instance=instance,
             solver_type="veloxq",   # or 'sbm'
             num_rep=1000,
-            job_name="test_run_2x2",
+            job_name="test_run_3x3",
         )
 
         print("\n" + "=" * 50)
@@ -67,7 +67,7 @@ def main():
         print("=" * 50)
 
         # Save output in standard format
-        out_file = root_dir / "resources" / "result_veloxq_2x2.json"
+        out_file = root_dir / "resources" / "result_veloxq_3x3.json"
         save_schedule(state, out_file)
         print(f"\nSaved result to: {out_file}")
 

@@ -1,0 +1,182 @@
+{
+    "instance": "5x5_breakdown",
+    "method": "QUBO simulated annealing (local), reschedule",
+    "makespan": 47,
+    "schedule": [
+        {
+            "job": "Z2",
+            "machine": "T",
+            "start": 6,
+            "end": 9,
+            "unit": "T"
+        },
+        {
+            "job": "Z2",
+            "machine": "F",
+            "start": 9,
+            "end": 14,
+            "unit": "F"
+        },
+        {
+            "job": "Z3",
+            "machine": "T",
+            "start": 9,
+            "end": 11,
+            "unit": "T"
+        },
+        {
+            "job": "Z2",
+            "machine": "S",
+            "start": 14,
+            "end": 19,
+            "unit": "S"
+        },
+        {
+            "job": "Z5",
+            "machine": "T",
+            "start": 15,
+            "end": 20,
+            "unit": "T"
+        },
+        {
+            "job": "Z3",
+            "machine": "F",
+            "start": 18,
+            "end": 21,
+            "unit": "F"
+        },
+        {
+            "job": "Z2",
+            "machine": "M",
+            "start": 23,
+            "end": 26,
+            "unit": "M"
+        },
+        {
+            "job": "Z4",
+            "machine": "T",
+            "start": 23,
+            "end": 29,
+            "unit": "T"
+        },
+        {
+            "job": "Z5",
+            "machine": "F",
+            "start": 23,
+            "end": 27,
+            "unit": "F"
+        },
+        {
+            "job": "Z3",
+            "machine": "S",
+            "start": 24,
+            "end": 26,
+            "unit": "S"
+        },
+        {
+            "job": "Z3",
+            "machine": "M",
+            "start": 26,
+            "end": 28,
+            "unit": "M"
+        },
+        {
+            "job": "Z5",
+            "machine": "S",
+            "start": 27,
+            "end": 31,
+            "unit": "S"
+        },
+        {
+            "job": "Z3",
+            "machine": "K",
+            "start": 28,
+            "end": 29,
+            "unit": "K"
+        },
+        {
+            "job": "Z4",
+            "machine": "F",
+            "start": 29,
+            "end": 33,
+            "unit": "F"
+        },
+        {
+            "job": "Z2",
+            "machine": "K",
+            "start": 30,
+            "end": 33,
+            "unit": "K"
+        },
+        {
+            "job": "Z5",
+            "machine": "M",
+            "start": 31,
+            "end": 35,
+            "unit": "M"
+        },
+        {
+            "job": "Z1",
+            "machine": "T",
+            "start": 32,
+            "end": 37,
+            "unit": "T"
+        },
+        {
+            "job": "Z4",
+            "machine": "S",
+            "start": 33,
+            "end": 36,
+            "unit": "S"
+        },
+        {
+            "job": "Z5",
+            "machine": "K",
+            "start": 35,
+            "end": 41,
+            "unit": "K"
+        },
+        {
+            "job": "Z1",
+            "machine": "F",
+            "start": 37,
+            "end": 40,
+            "unit": "F"
+        },
+        {
+            "job": "Z4",
+            "machine": "M",
+            "start": 37,
+            "end": 39,
+            "unit": "M"
+        },
+        {
+            "job": "Z1",
+            "machine": "S",
+            "start": 40,
+            "end": 45,
+            "unit": "S"
+        },
+        {
+            "job": "Z4",
+            "machine": "K",
+            "start": 42,
+            "end": 46,
+            "unit": "K"
+        },
+        {
+            "job": "Z1",
+            "machine": "M",
+            "start": 45,
+            "end": 46,
+            "unit": "M"
+        },
+        {
+            "job": "Z1",
+            "machine": "K",
+            "start": 46,
+            "end": 47,
+            "unit": "K"
+        }
+    ]
+}
