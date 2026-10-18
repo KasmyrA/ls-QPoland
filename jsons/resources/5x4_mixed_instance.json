@@ -1,0 +1,6 @@
+{"problem":"erp_scheduling","name":"5x4_mixed","jobs":[
+{"id":"Z1","operations":[{"machine":"T","duration":1},{"machine":"F","duration":2},{"machine":"S","duration":3},{"machine":"M","duration":3}]},
+{"id":"Z2","operations":[{"machine":"T","duration":3},{"machine":"F","duration":1},{"machine":"S","duration":4},{"machine":"M","duration":3}]},
+{"id":"Z3","operations":[{"machine":"T","duration":4},{"machine":"F","duration":4},{"machine":"S","duration":4},{"machine":"M","duration":1}]},
+{"id":"Z4","operations":[{"machine":"T","duration":3},{"machine":"F","duration":2},{"machine":"S","duration":3},{"machine":"M","duration":3}]},
+{"id":"Z5","operations":[{"machine":"T","duration":3},{"machine":"F","duration":3},{"machine":"S","duration":2},{"machine":"M","duration":2}]}]}
