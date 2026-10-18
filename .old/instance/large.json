@@ -1,6 +1,0 @@
-{
-    "n_jobs": 8,
-    "n_machines": 4,
-    "durations": [6, 2, 8, 1, 5, 3, 7, 4],
-    "description": "Larger instance — 8 jobs on 4 machines (32 QUBO bits)"
-}

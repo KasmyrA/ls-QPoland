@@ -1,6 +1,0 @@
-{
-    "n_jobs": 5,
-    "n_machines": 3,
-    "durations": [7, 3, 5, 2, 4],
-    "description": "Medium instance — 5 jobs on 3 machines"
-}
