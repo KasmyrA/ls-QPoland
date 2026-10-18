@@ -15,8 +15,12 @@
 backends: sa (local), exact (<=24 vars), sbm / veloxq (cloud), cpsat (classical reference)
 """
 import argparse
+import sys
+from pathlib import Path
 
-from pipeline import solve_basic, solve_extended, solve_rolling
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from qubo.pipeline import solve_basic, solve_extended, solve_rolling
 
 
 def main():

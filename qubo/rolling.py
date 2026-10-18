@@ -7,14 +7,9 @@ from __future__ import annotations
 
 from typing import Any, Callable, Optional
 
-try:
-    from ..jsons.machines import CalculationState, InstanceData, Job
-    from .schedule_utils import Fixed, Plan, op_options, overlap, plan_cost, validate_plan
-    from .heuristics import greedy_schedule
-except ImportError:
-    from entities import CalculationState, InstanceData, Job  # type: ignore
-    from schedule_utils import Fixed, Plan, op_options, overlap, plan_cost, validate_plan  # type: ignore
-    from heuristics import greedy_schedule  # type: ignore
+from jsons.entities import CalculationState, InstanceData, Job
+from .schedule_utils import Fixed, Plan, op_options, overlap, plan_cost, validate_plan
+from .heuristics import greedy_schedule
 
 Solver = Callable[[InstanceData, Fixed], tuple[Optional[Plan], dict]]
 

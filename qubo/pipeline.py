@@ -15,26 +15,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Optional, Union
 
-try:
-    from ..jsons.load import load_instance, load_schedule
-    from ..jsons.save import save_schedule
-    from ..jsons.machines import expand_instance, load_events, load_machine_config, resolve_outages
-    from .schedule_utils import Fixed, plan_cost, validate_plan
-    from .qubo import make_qubo_solver
-    from .samplers import make_exact_sampler, make_sa_sampler
-    from .cp_sat_ref import make_cpsat_solver
-    from .rolling import (evaluate, plan_from_state, reschedule, right_shift,
-                          rolling_schedule, state_from_plan)
-except ImportError:
-    from loader import load_instance, load_schedule  # type: ignore
-    from saver import save_schedule  # type: ignore
-    from machines import expand_instance, load_events, load_machine_config, resolve_outages  # type: ignore
-    from schedule_utils import Fixed, plan_cost, validate_plan  # type: ignore
-    from qubo import make_qubo_solver  # type: ignore
-    from samplers import make_exact_sampler, make_sa_sampler  # type: ignore
-    from cp_sat_ref import make_cpsat_solver  # type: ignore
-    from rolling import (evaluate, plan_from_state, reschedule, right_shift,  # type: ignore
-                         rolling_schedule, state_from_plan)
+from jsons.load import load_instance, load_schedule
+from jsons.save import save_schedule
+from jsons.machines import expand_instance, load_events, load_machine_config, resolve_outages
+from .schedule_utils import Fixed, plan_cost, validate_plan
+from .qubo import make_qubo_solver
+from .samplers import make_exact_sampler, make_sa_sampler
+from .rolling import (evaluate, plan_from_state, reschedule, right_shift,
+                      rolling_schedule, state_from_plan)
 
 
 def build_solver(backend: str = "sa", objective: str = "makespan", *, sa_reads: int = 96, sa_sweeps: int = 600,
@@ -42,6 +30,8 @@ def build_solver(backend: str = "sa", objective: str = "makespan", *, sa_reads: 
                  cpsat_time_limit: float = 30.0):
     b = backend.lower()
     if b == "cpsat":
+        from .cp_sat_ref import make_cpsat_solver
+
         return make_cpsat_solver(objective, cpsat_time_limit), "CP-SAT (OR-Tools, time-indexed)"
     if b == "exact":
         sampler, name = make_exact_sampler(), "QUBO Exact Ground-State"

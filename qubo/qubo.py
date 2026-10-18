@@ -21,14 +21,9 @@ from __future__ import annotations
 from typing import Any, Callable, Optional
 import numpy as np
 
-try:
-    from ..jsons.entities import InstanceData
-    from .schedule_utils import Fixed, Plan, op_options, overlap, plan_cost, validate_plan
-    from .heuristics import greedy_horizon
-except ImportError:
-    from ..jsons.entities import InstanceData  # type: ignore
-    from schedule_utils import Fixed, Plan, op_options, overlap, plan_cost, validate_plan  # type: ignore
-    from heuristics import greedy_horizon  # type: ignore
+from jsons.entities import InstanceData
+from .schedule_utils import Fixed, Plan, op_options, overlap, plan_cost, validate_plan
+from .heuristics import greedy_horizon
 
 
 # --------------------------------------------------------------------------- windows

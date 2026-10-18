@@ -3,12 +3,8 @@ from __future__ import annotations
 
 from typing import Optional
 
-try:
-    from ..jsons.entities import InstanceData
-    from .schedule_utils import Fixed, Plan, op_options, overlap
-except ImportError:
-    from entities import InstanceData  # type: ignore
-    from schedule_utils import Fixed, Plan, op_options, overlap  # type: ignore
+from jsons.entities import InstanceData
+from .schedule_utils import Fixed, Plan, op_options, overlap
 
 
 def _duty_violation(work, t, d, limit) -> bool:

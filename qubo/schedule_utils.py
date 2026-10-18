@@ -12,10 +12,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 import numpy as np
 
-try:
-    from ..jsons.machines import InstanceData
-except ImportError:
-    from entities import InstanceData  # type: ignore
+from jsons.entities import InstanceData
 
 Interval = tuple[int, int]
 Plan = dict[tuple[str, int], tuple[str, int, int]]
