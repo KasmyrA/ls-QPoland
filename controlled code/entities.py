@@ -12,6 +12,7 @@ class Operation:
     duration: int
     step: int = 0
     job_id: str = ""
+    machines: Optional[Any] = None  
 
     def to_dict(self) -> dict[str, Any]:
         return {"machine": self.machine, "duration": self.duration}
@@ -83,27 +84,24 @@ class ScheduledTask:
     machine: str
     start: int
     end: int
+    unit: str = ""  #T2 or sth like that 
 
     @property
     def duration(self) -> int:
         return self.end - self.start
 
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "job": self.job,
-            "machine": self.machine,
-            "start": int(self.start),
-            "end": int(self.end),
-        }
-
+            d = {"job": self.job, "machine": self.machine,
+                 "start": int(self.start), "end": int(self.end)}
+            if self.unit:                  
+                d["unit"] = self.unit
+            return d
+    
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> ScheduledTask:
-        return cls(
-            job=str(data["job"]),
-            machine=str(data["machine"]),
-            start=int(data["start"]),
-            end=int(data["end"]),
-        )
+    def from_dict(cls, data):
+        return cls(job=str(data["job"]), machine=str(data["machine"]),
+                   start=int(data["start"]), end=int(data["end"]),
+                   unit=str(data.get("unit", "")))
 
 
 @dataclass

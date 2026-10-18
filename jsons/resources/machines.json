@@ -1,0 +1,12 @@
+{
+  "time_unit": "h",
+  "machines": {
+    "T": {"count": 2, "max_work": 6, "min_rest": 3},
+    "F": {"count": 1},
+    "S": {"count": 3, "max_work": 8, "min_rest": 2}
+  },
+  "duration_overrides": {
+    "Z1/0": {"T": 2},
+    "Z2/1": {"F": 3, "S": 4}
+  }
+}
