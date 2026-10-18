@@ -1,0 +1,17 @@
+{
+  "group": "real",
+  "case": "8x4_breakdown",
+  "mode": "reschedule",
+  "solver": "sa",
+  "objective": "makespan",
+  "reference_cost": 19,
+  "right_shift_cost": 20,
+  "n_vars": 563,
+  "status": "ok",
+  "cost": 19,
+  "violations": 0,
+  "gap_pct": 0.0,
+  "reload_ok": false,
+  "reload_violations": 1,
+  "time_s": 12.3
+}

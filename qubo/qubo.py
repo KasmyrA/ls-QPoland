@@ -311,23 +311,41 @@ def pick_best_feasible(samples, md: dict[str, Any]):
 # --------------------------------------------------------------------------- solver adapter
 def make_qubo_solver(sampler: Callable, objective: str = "makespan",
                      penalty_lambda: Optional[float] = None, horizon_extras=(0, 2, 5),
-                     lambda_mode: str = "tight", slack_encoding: str = "binary"):
-    """solver(sub_instance, fixed) -> (plan | None, info).  `sampler(Q, offset)` -> [(bits, energy)]."""
+                     lambda_mode: str = "tight", slack_encoding: str = "binary", max_horizon_tries: int = 8):
+    """solver(sub_instance, fixed) -> (plan | None, info).
+
+    Horizons tried, in ascending order, from the trivial lower bound up to greedy+max(extras):
+    the first one with a feasible sample wins (smallest horizon = fewest qubits). Horizons whose QUBO
+    exceeds sampler.max_vars (QAOA / exact samplers) are skipped instead of failing.
+    """
     def solve(instance: InstanceData, fixed: Optional[Fixed] = None):
         fixed = fixed or Fixed()
         now = min(fixed.release.values(), default=0)
         h0 = greedy_horizon(instance, fixed, now=now)
-        info: dict[str, Any] = {}
-        for extra in horizon_extras:
+        lb = max((sum(min(op_options(op).values()) for op in j.operations) for j in instance.jobs if j.operations),
+                 default=0)
+        top = h0 + max(horizon_extras)
+        cand = list(range(max(lb, 1), top + 1))
+        if len(cand) > max_horizon_tries:
+            step = (len(cand) - 1) / (max_horizon_tries - 1)
+            cand = sorted({cand[round(i * step)] for i in range(max_horizon_tries)} | {h0, top})
+        info: dict[str, Any] = {"horizons_tried": []}
+        limit = getattr(sampler, "max_vars", None)
+        for H in cand:
             try:
-                Q, md = build_job_shop_qubo(instance, horizon=h0 + extra, penalty_lambda=penalty_lambda,
+                Q, md = build_job_shop_qubo(instance, horizon=H, penalty_lambda=penalty_lambda,
                                             fixed=fixed, objective=objective, lambda_mode=lambda_mode,
                                             slack_encoding=slack_encoding)
             except ValueError as exc:
                 info["error"] = str(exc)
                 continue
-            samples = sampler(Q, md["offset"], md) if getattr(sampler, "wants_md", False) else sampler(Q, md["offset"])
+            if limit is not None and md["n_vars"] > limit:
+                info["horizons_tried"].append((H, md["n_vars"], "skipped: too many qubits"))
+                continue
+            samples = (sampler(Q, md["offset"], md) if getattr(sampler, "wants_md", False)
+                       else sampler(Q, md["offset"]))
             plan, energy, n_ok = pick_best_feasible(samples, md)
+            info["horizons_tried"].append((H, md["n_vars"], n_ok))
             info.update(n_vars=md["n_vars"], n_slack_vars=md["n_slack_vars"], horizon=md["horizon"],
                         penalty_lambda=md["penalty_lambda"], n_samples=len(samples), n_feasible=n_ok)
             if plan is not None:

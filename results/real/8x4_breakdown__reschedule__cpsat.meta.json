@@ -1,0 +1,17 @@
+{
+  "group": "real",
+  "case": "8x4_breakdown",
+  "mode": "reschedule",
+  "solver": "cpsat",
+  "objective": "makespan",
+  "reference_cost": 19,
+  "right_shift_cost": 20,
+  "n_vars": null,
+  "status": "ok",
+  "cost": 19,
+  "violations": 0,
+  "gap_pct": 0.0,
+  "reload_ok": false,
+  "reload_violations": 2,
+  "time_s": 0.3
+}

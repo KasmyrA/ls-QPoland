@@ -1,0 +1,20 @@
+group,case,mode,solver,status,cost,reference_cost,gap_pct,violations,right_shift_cost,n_vars,time_s,error
+base3x3,3x3_base,plan,cpsat,ok,7,7,0.0,0,,,0.0,
+base3x3,3x3_base,plan,sa,ok,7,7,0.0,0,,53,1.0,
+base3x3,3x3_base,rolling,cpsat,ok,8,7,14.3,0,,,0.1,
+base3x3,3x3_base,rolling,sa,ok,8,7,14.3,0,,,0.9,
+breakdown,3x3_breakdown,,,error,,,,,,,,FileNotFoundError: [Errno 2] No such file or directory: 'tests\\3x3\\3x3_breakdown_instance.json'
+quantum,q2x2_basic,plan,qaoa,ok,4,4,0.0,0,,10,3.4,
+quantum,q2x2_basic,plan,cpsat,ok,4,4,0.0,0,,,0.0,
+quantum,q2x2_machines,,,error,,,,,,,,FileNotFoundError: [Errno 2] No such file or directory: 'tests\\quantum_2x2\\q2x2_machines_instance.json'
+quantum,q2x2_breakdown,,,error,,,,,,,,FileNotFoundError: [Errno 2] No such file or directory: 'tests\\quantum_2x2\\q2x2_breakdown_instance.json'
+real,5x5,,,error,,,,,,,,FileNotFoundError: [Errno 2] No such file or directory: 'stress\\stress_5x5_instance.json'
+real,5x5_breakdown,,,error,,,,,,,,FileNotFoundError: [Errno 2] No such file or directory: 'stress\\stress_5x5_instance.json'
+real,6x3_duty,plan,cpsat,ok,11,11,0.0,0,,,0.1,
+real,6x3_duty,plan,sa,ok,11,11,0.0,0,,276,9.8,
+real,6x3_duty,rolling,cpsat,ok,14,11,27.3,0,,,0.2,
+real,6x3_duty,rolling,sa,ok,14,11,27.3,0,,,11.2,
+real,8x4_breakdown,reschedule,cpsat,ok,19,19,0.0,0,20,,0.3,
+real,8x4_breakdown,reschedule,sa,ok,19,19,0.0,0,20,563,12.3,
+rolling,roll_12x5,rolling,cpsat,ok,309,283,9.2,0,,,2.7,
+rolling,roll_12x5,rolling,sa,ok,397,283,40.3,0,,,185.2,

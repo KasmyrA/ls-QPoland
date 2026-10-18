@@ -28,6 +28,7 @@ def make_exact_sampler(max_vars: int = 24):
             if e[j] < best_e:
                 best_e, best_x = float(e[j]), X[j].astype(int)
         return [(best_x, best_e)]
+    sample.max_vars = max_vars
     return sample
 
 

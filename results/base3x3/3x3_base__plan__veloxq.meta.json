@@ -1,0 +1,11 @@
+{
+  "group": "base3x3",
+  "case": "3x3_base",
+  "mode": "plan",
+  "solver": "veloxq",
+  "objective": "makespan",
+  "reference_cost": 7,
+  "n_vars": 133,
+  "status": "no_solution",
+  "time_s": 46.6
+}

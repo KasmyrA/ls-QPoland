@@ -1,0 +1,16 @@
+{
+  "group": "base3x3",
+  "case": "3x3_base",
+  "mode": "plan",
+  "solver": "sa",
+  "objective": "makespan",
+  "reference_cost": 7,
+  "n_vars": 53,
+  "status": "ok",
+  "cost": 7,
+  "violations": 0,
+  "gap_pct": 0.0,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 1.0
+}

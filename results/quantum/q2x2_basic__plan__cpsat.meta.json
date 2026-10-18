@@ -1,0 +1,16 @@
+{
+  "group": "quantum",
+  "case": "q2x2_basic",
+  "mode": "plan",
+  "solver": "cpsat",
+  "objective": "makespan",
+  "reference_cost": 4,
+  "n_vars": null,
+  "status": "ok",
+  "cost": 4,
+  "violations": 0,
+  "gap_pct": 0.0,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 0.0
+}

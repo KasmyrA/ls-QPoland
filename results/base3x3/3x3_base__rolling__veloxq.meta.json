@@ -1,0 +1,11 @@
+{
+  "group": "base3x3",
+  "case": "3x3_base",
+  "mode": "rolling",
+  "solver": "veloxq",
+  "objective": "makespan",
+  "reference_cost": 7,
+  "status": "error",
+  "error": "RuntimeError: sub-problem at now=0 has no feasible solution: {'horizons_tried': [(4, 16, 0), (5, 26, 0), (6, 36, 0), (7, 46, 0), (8, 56, 0), (9, 66, 0), (10, 76, 0), (11, 86, 0)], 'n_vars': 86, 'n_slack_vars': 0, 'horizon': 11, 'penalty_lambda': 22.0, 'n",
+  "time_s": 45.1
+}
