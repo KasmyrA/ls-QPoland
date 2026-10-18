@@ -146,13 +146,13 @@ The complete schema is available in [`output_format.json`](controlled%20code/res
 Generate PNG charts from the existing result files:
 
 ```bash
-uv run python "controlled code/plot_results.py"
+uv run python "jsons/plot_results.py"
 ```
 
 With no arguments, the script processes every `controlled code/resources/result_*.json` file and saves images in `controlled code/resources/plots/`. To pass a custom result file and output directory:
 
 ```bash
-uv run python "controlled code/plot_results.py" \
+uv run python "jsons/plot_results.py" \
   "controlled code/resources/result_instance_2x2.json" \
   --output-dir /tmp/jobshop-plots
 ```
