@@ -7,55 +7,64 @@
             "job": "Z2",
             "machine": "T",
             "start": 0,
-            "end": 1
+            "end": 1,
+            "unit": "T2"
         },
         {
             "job": "Z1",
             "machine": "T",
             "start": 1,
-            "end": 3
+            "end": 3,
+            "unit": "T1"
         },
         {
             "job": "Z2",
             "machine": "F",
             "start": 1,
-            "end": 3
+            "end": 3,
+            "unit": "F"
         },
         {
             "job": "Z3",
             "machine": "T",
             "start": 1,
-            "end": 3
+            "end": 3,
+            "unit": "T2"
         },
         {
             "job": "Z1",
             "machine": "F",
             "start": 3,
-            "end": 4
+            "end": 4,
+            "unit": "F"
         },
         {
             "job": "Z2",
             "machine": "S",
             "start": 3,
-            "end": 4
+            "end": 4,
+            "unit": "S2"
         },
         {
             "job": "Z3",
             "machine": "F",
             "start": 4,
-            "end": 6
+            "end": 6,
+            "unit": "F"
         },
         {
             "job": "Z1",
             "machine": "S",
             "start": 5,
-            "end": 7
+            "end": 7,
+            "unit": "S1"
         },
         {
             "job": "Z3",
             "machine": "S",
             "start": 6,
-            "end": 7
+            "end": 7,
+            "unit": "S2"
         }
     ]
 }

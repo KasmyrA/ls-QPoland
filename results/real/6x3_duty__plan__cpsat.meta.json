@@ -10,7 +10,7 @@
   "cost": 11,
   "violations": 0,
   "gap_pct": 0.0,
-  "reload_ok": false,
-  "reload_violations": 2,
+  "reload_ok": true,
+  "reload_violations": 0,
   "time_s": 0.1
 }

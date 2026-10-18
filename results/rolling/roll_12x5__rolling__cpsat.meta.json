@@ -7,10 +7,10 @@
   "reference_cost": 283,
   "n_vars": null,
   "status": "ok",
-  "cost": 309,
+  "cost": 323,
   "violations": 0,
-  "gap_pct": 9.2,
-  "reload_ok": false,
-  "reload_violations": 1,
+  "gap_pct": 14.1,
+  "reload_ok": true,
+  "reload_violations": 0,
   "time_s": 2.7
 }

@@ -4,14 +4,14 @@
   "mode": "reschedule",
   "solver": "sa",
   "objective": "makespan",
-  "reference_cost": 19,
-  "right_shift_cost": 20,
-  "n_vars": 563,
+  "reference_cost": 20,
+  "right_shift_cost": 21,
+  "n_vars": 625,
   "status": "ok",
-  "cost": 19,
+  "cost": 20,
   "violations": 0,
   "gap_pct": 0.0,
-  "reload_ok": false,
-  "reload_violations": 1,
-  "time_s": 12.3
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 14.8
 }

@@ -1,0 +1,17 @@
+{
+  "group": "breakdown",
+  "case": "3x3_breakdown",
+  "mode": "reschedule",
+  "solver": "cpsat",
+  "objective": "makespan",
+  "reference_cost": 9,
+  "right_shift_cost": 10,
+  "n_vars": null,
+  "status": "ok",
+  "cost": 9,
+  "violations": 0,
+  "gap_pct": 0.0,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 0.0
+}

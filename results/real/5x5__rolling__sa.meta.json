@@ -1,0 +1,16 @@
+{
+  "group": "real",
+  "case": "5x5",
+  "mode": "rolling",
+  "solver": "sa",
+  "objective": "makespan",
+  "reference_cost": 40,
+  "n_vars": null,
+  "status": "ok",
+  "cost": 43,
+  "violations": 0,
+  "gap_pct": 7.5,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 50.1
+}

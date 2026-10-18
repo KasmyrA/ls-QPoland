@@ -14,9 +14,9 @@ Every run writes results/<group>/<case>__<mode>__<solver>.json (schedule in outp
 and .meta.json (record). results/summary.csv + results/summary.json collect all records.
 
 Output format
-  --format plain      (default) exactly the keys of output_format.json:
+  --format framework  (default) includes "unit" per task when the instance has physical units.
+  --format plain                  exactly the keys of output_format.json:
                       {"instance", "method", "makespan", "schedule": [{"job","machine","start","end"}]}
-  --format framework  same, plus "unit" per task (T1, T2, ...) when the instance has physical units.
 
 Usage
   python run_all_tests.py                       # all groups, local solvers
@@ -52,7 +52,7 @@ CP_TIME = 60.0
 SA_READS, SA_SWEEPS = 48, 300
 QAOA_REPS, QAOA_MAXITER, QAOA_TOPK, QAOA_MAX_QUBITS = 2, 150, 256, 16
 FORMATS = ("plain", "framework")
-OUTPUT_FORMAT = "plain"
+OUTPUT_FORMAT = "framework"
 METHOD_NAMES = {
     "cpsat": "CP-SAT (OR-Tools)",
     "sa": "QUBO simulated annealing (local)",
@@ -236,8 +236,8 @@ def main():
     p.add_argument("--veloxq", action="store_true")
     p.add_argument("--with-big", action="store_true", help="add 15x6 rolling (slow)")
     p.add_argument("--cp-time", type=float, default=60.0)
-    p.add_argument("--format", choices=FORMATS, default="plain",
-                   help="plain = output_format.json keys only; framework = adds unit per task")
+    p.add_argument("--format", choices=FORMATS, default="framework",
+                   help="framework (default) adds physical unit per task; plain uses output_format.json keys only")
     a = p.parse_args()
     CP_TIME = a.cp_time
     OUTPUT_FORMAT = a.format

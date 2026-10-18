@@ -7,361 +7,421 @@
             "job": "Z1",
             "machine": "T",
             "start": 0,
-            "end": 2
+            "end": 2,
+            "unit": "T2"
         },
         {
             "job": "Z3",
             "machine": "T",
             "start": 0,
-            "end": 1
+            "end": 1,
+            "unit": "T1"
         },
         {
             "job": "Z4",
             "machine": "T",
             "start": 0,
-            "end": 4
+            "end": 4,
+            "unit": "T3"
         },
         {
             "job": "Z12",
             "machine": "T",
             "start": 1,
-            "end": 4
+            "end": 4,
+            "unit": "T1"
         },
         {
             "job": "Z1",
             "machine": "F",
             "start": 2,
-            "end": 5
+            "end": 5,
+            "unit": "F1"
         },
         {
             "job": "Z3",
             "machine": "F",
             "start": 2,
-            "end": 4
+            "end": 4,
+            "unit": "F2"
         },
         {
             "job": "Z5",
             "machine": "T",
             "start": 3,
-            "end": 6
+            "end": 6,
+            "unit": "T2"
         },
         {
             "job": "Z12",
             "machine": "F",
             "start": 4,
-            "end": 9
+            "end": 9,
+            "unit": "F2"
         },
         {
             "job": "Z7",
             "machine": "T",
             "start": 4,
-            "end": 6
+            "end": 6,
+            "unit": "T3"
         },
         {
             "job": "Z8",
             "machine": "T",
             "start": 4,
-            "end": 6
+            "end": 6,
+            "unit": "T1"
         },
         {
             "job": "Z1",
             "machine": "S",
             "start": 6,
-            "end": 7
+            "end": 7,
+            "unit": "S1"
         },
         {
             "job": "Z3",
             "machine": "S",
             "start": 6,
-            "end": 9
+            "end": 9,
+            "unit": "S2"
         },
         {
             "job": "Z8",
             "machine": "F",
             "start": 6,
-            "end": 9
+            "end": 9,
+            "unit": "F1"
         },
         {
             "job": "Z1",
             "machine": "M",
             "start": 7,
-            "end": 10
+            "end": 10,
+            "unit": "M1"
         },
         {
             "job": "Z10",
             "machine": "T",
             "start": 8,
-            "end": 10
+            "end": 10,
+            "unit": "T2"
         },
         {
             "job": "Z12",
             "machine": "S",
             "start": 9,
-            "end": 13
+            "end": 13,
+            "unit": "S1"
         },
         {
             "job": "Z5",
             "machine": "F",
             "start": 9,
-            "end": 12
+            "end": 12,
+            "unit": "F1"
         },
         {
             "job": "Z8",
             "machine": "S",
             "start": 9,
-            "end": 12
+            "end": 12,
+            "unit": "S2"
         },
         {
             "job": "Z3",
             "machine": "M",
             "start": 10,
-            "end": 14
+            "end": 14,
+            "unit": "M2"
         },
         {
             "job": "Z4",
             "machine": "F",
             "start": 10,
-            "end": 14
+            "end": 14,
+            "unit": "F2"
         },
         {
             "job": "Z1",
             "machine": "K",
             "start": 11,
-            "end": 16
+            "end": 16,
+            "unit": "K"
         },
         {
             "job": "Z6",
             "machine": "T",
             "start": 11,
-            "end": 15
+            "end": 15,
+            "unit": "T1"
         },
         {
             "job": "Z9",
             "machine": "T",
             "start": 11,
-            "end": 13
+            "end": 13,
+            "unit": "T2"
         },
         {
             "job": "Z7",
             "machine": "F",
             "start": 12,
-            "end": 13
+            "end": 13,
+            "unit": "F1"
         },
         {
             "job": "Z12",
             "machine": "M",
             "start": 13,
-            "end": 15
+            "end": 15,
+            "unit": "M1"
         },
         {
             "job": "Z7",
             "machine": "S",
             "start": 13,
-            "end": 15
+            "end": 15,
+            "unit": "S1"
         },
         {
             "job": "Z9",
             "machine": "F",
             "start": 13,
-            "end": 18
+            "end": 18,
+            "unit": "F1"
         },
         {
             "job": "Z5",
             "machine": "S",
             "start": 14,
-            "end": 18
+            "end": 18,
+            "unit": "S2"
         },
         {
             "job": "Z2",
             "machine": "T",
             "start": 15,
-            "end": 17
+            "end": 17,
+            "unit": "T3"
         },
         {
             "job": "Z3",
             "machine": "K",
             "start": 16,
-            "end": 21
+            "end": 21,
+            "unit": "K"
         },
         {
             "job": "Z6",
             "machine": "F",
             "start": 16,
-            "end": 20
+            "end": 20,
+            "unit": "F2"
         },
         {
             "job": "Z7",
             "machine": "M",
             "start": 16,
-            "end": 17
+            "end": 17,
+            "unit": "M1"
         },
         {
             "job": "Z8",
             "machine": "M",
             "start": 18,
-            "end": 21
+            "end": 21,
+            "unit": "M1"
         },
         {
             "job": "Z10",
             "machine": "F",
             "start": 20,
-            "end": 22
+            "end": 22,
+            "unit": "F1"
         },
         {
             "job": "Z11",
             "machine": "T",
             "start": 20,
-            "end": 21
+            "end": 21,
+            "unit": "T3"
         },
         {
             "job": "Z9",
             "machine": "S",
             "start": 20,
-            "end": 21
+            "end": 21,
+            "unit": "S2"
         },
         {
             "job": "Z5",
             "machine": "M",
             "start": 21,
-            "end": 22
+            "end": 22,
+            "unit": "M1"
         },
         {
             "job": "Z6",
             "machine": "S",
             "start": 21,
-            "end": 22
+            "end": 22,
+            "unit": "S2"
         },
         {
             "job": "Z7",
             "machine": "K",
             "start": 21,
-            "end": 22
+            "end": 22,
+            "unit": "K"
         },
         {
             "job": "Z10",
             "machine": "S",
             "start": 22,
-            "end": 27
+            "end": 27,
+            "unit": "S2"
         },
         {
             "job": "Z11",
             "machine": "F",
             "start": 22,
-            "end": 27
+            "end": 27,
+            "unit": "F2"
         },
         {
             "job": "Z8",
             "machine": "K",
             "start": 22,
-            "end": 25
+            "end": 25,
+            "unit": "K"
         },
         {
             "job": "Z9",
             "machine": "M",
             "start": 22,
-            "end": 23
+            "end": 23,
+            "unit": "M2"
         },
         {
             "job": "Z6",
             "machine": "M",
             "start": 23,
-            "end": 25
+            "end": 25,
+            "unit": "M2"
         },
         {
             "job": "Z4",
             "machine": "S",
             "start": 25,
-            "end": 27
+            "end": 27,
+            "unit": "S1"
         },
         {
             "job": "Z9",
             "machine": "K",
             "start": 25,
-            "end": 28
+            "end": 28,
+            "unit": "K"
         },
         {
             "job": "Z6",
             "machine": "K",
             "start": 28,
-            "end": 33
+            "end": 33,
+            "unit": "K"
         },
         {
             "job": "Z10",
             "machine": "M",
             "start": 30,
-            "end": 32
+            "end": 32,
+            "unit": "M1"
         },
         {
             "job": "Z2",
             "machine": "F",
             "start": 31,
-            "end": 32
+            "end": 32,
+            "unit": "F2"
         },
         {
             "job": "Z4",
             "machine": "M",
             "start": 32,
-            "end": 34
+            "end": 34,
+            "unit": "M2"
         },
         {
             "job": "Z12",
             "machine": "K",
             "start": 33,
-            "end": 36
+            "end": 36,
+            "unit": "K"
         },
         {
             "job": "Z2",
             "machine": "S",
             "start": 33,
-            "end": 37
+            "end": 37,
+            "unit": "S1"
         },
         {
             "job": "Z11",
             "machine": "S",
             "start": 35,
-            "end": 38
+            "end": 38,
+            "unit": "S2"
         },
         {
             "job": "Z10",
             "machine": "K",
             "start": 36,
-            "end": 37
+            "end": 37,
+            "unit": "K"
         },
         {
             "job": "Z5",
             "machine": "K",
             "start": 37,
-            "end": 42
+            "end": 42,
+            "unit": "K"
         },
         {
             "job": "Z2",
             "machine": "M",
             "start": 38,
-            "end": 42
+            "end": 42,
+            "unit": "M1"
         },
         {
             "job": "Z11",
             "machine": "M",
             "start": 40,
-            "end": 43
+            "end": 43,
+            "unit": "M2"
         },
         {
             "job": "Z2",
             "machine": "K",
             "start": 42,
-            "end": 43
+            "end": 43,
+            "unit": "K"
         },
         {
             "job": "Z4",
             "machine": "K",
             "start": 43,
-            "end": 46
+            "end": 46,
+            "unit": "K"
         },
         {
             "job": "Z11",
             "machine": "K",
             "start": 46,
-            "end": 48
+            "end": 48,
+            "unit": "K"
         }
     ]
 }

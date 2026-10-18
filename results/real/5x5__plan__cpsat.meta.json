@@ -1,0 +1,16 @@
+{
+  "group": "real",
+  "case": "5x5",
+  "mode": "plan",
+  "solver": "cpsat",
+  "objective": "makespan",
+  "reference_cost": 40,
+  "n_vars": null,
+  "status": "ok",
+  "cost": 40,
+  "violations": 0,
+  "gap_pct": 0.0,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 0.3
+}

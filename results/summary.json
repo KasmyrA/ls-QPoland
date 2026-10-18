@@ -13,7 +13,7 @@
     "gap_pct": 0.0,
     "reload_ok": true,
     "reload_violations": 0,
-    "time_s": 0.0
+    "time_s": 0.1
   },
   {
     "group": "base3x3",
@@ -66,8 +66,36 @@
   {
     "group": "breakdown",
     "case": "3x3_breakdown",
-    "status": "error",
-    "error": "FileNotFoundError: [Errno 2] No such file or directory: 'tests\\\\3x3\\\\3x3_breakdown_instance.json'"
+    "mode": "reschedule",
+    "solver": "cpsat",
+    "objective": "makespan",
+    "reference_cost": 9,
+    "right_shift_cost": 10,
+    "n_vars": null,
+    "status": "ok",
+    "cost": 9,
+    "violations": 0,
+    "gap_pct": 0.0,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 0.0
+  },
+  {
+    "group": "breakdown",
+    "case": "3x3_breakdown",
+    "mode": "reschedule",
+    "solver": "sa",
+    "objective": "makespan",
+    "reference_cost": 9,
+    "right_shift_cost": 10,
+    "n_vars": 39,
+    "status": "ok",
+    "cost": 9,
+    "violations": 0,
+    "gap_pct": 0.0,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 0.5
   },
   {
     "group": "quantum",
@@ -83,7 +111,7 @@
     "gap_pct": 0.0,
     "reload_ok": true,
     "reload_violations": 0,
-    "time_s": 3.4
+    "time_s": 3.5
   },
   {
     "group": "quantum",
@@ -102,28 +130,102 @@
     "time_s": 0.0
   },
   {
-    "group": "quantum",
-    "case": "q2x2_machines",
-    "status": "error",
-    "error": "FileNotFoundError: [Errno 2] No such file or directory: 'tests\\\\quantum_2x2\\\\q2x2_machines_instance.json'"
-  },
-  {
-    "group": "quantum",
-    "case": "q2x2_breakdown",
-    "status": "error",
-    "error": "FileNotFoundError: [Errno 2] No such file or directory: 'tests\\\\quantum_2x2\\\\q2x2_breakdown_instance.json'"
+    "group": "real",
+    "case": "5x5",
+    "mode": "plan",
+    "solver": "cpsat",
+    "objective": "makespan",
+    "reference_cost": 40,
+    "n_vars": null,
+    "status": "ok",
+    "cost": 40,
+    "violations": 0,
+    "gap_pct": 0.0,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 0.3
   },
   {
     "group": "real",
     "case": "5x5",
-    "status": "error",
-    "error": "FileNotFoundError: [Errno 2] No such file or directory: 'stress\\\\stress_5x5_instance.json'"
+    "mode": "plan",
+    "solver": "sa",
+    "objective": "makespan",
+    "reference_cost": 40,
+    "n_vars": 1012,
+    "status": "ok",
+    "cost": 46,
+    "violations": 0,
+    "gap_pct": 15.0,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 57.3
+  },
+  {
+    "group": "real",
+    "case": "5x5",
+    "mode": "rolling",
+    "solver": "cpsat",
+    "objective": "makespan",
+    "reference_cost": 40,
+    "n_vars": null,
+    "status": "ok",
+    "cost": 41,
+    "violations": 0,
+    "gap_pct": 2.5,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 0.8
+  },
+  {
+    "group": "real",
+    "case": "5x5",
+    "mode": "rolling",
+    "solver": "sa",
+    "objective": "makespan",
+    "reference_cost": 40,
+    "n_vars": null,
+    "status": "ok",
+    "cost": 43,
+    "violations": 0,
+    "gap_pct": 7.5,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 50.1
   },
   {
     "group": "real",
     "case": "5x5_breakdown",
-    "status": "error",
-    "error": "FileNotFoundError: [Errno 2] No such file or directory: 'stress\\\\stress_5x5_instance.json'"
+    "mode": "reschedule",
+    "solver": "cpsat",
+    "objective": "makespan",
+    "reference_cost": 46,
+    "right_shift_cost": 46,
+    "n_vars": null,
+    "status": "ok",
+    "cost": 46,
+    "violations": 0,
+    "gap_pct": 0.0,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 0.4
+  },
+  {
+    "group": "real",
+    "case": "5x5_breakdown",
+    "mode": "reschedule",
+    "solver": "sa",
+    "objective": "makespan",
+    "reference_cost": 46,
+    "right_shift_cost": 46,
+    "n_vars": 939,
+    "status": "ok",
+    "cost": 47,
+    "violations": 0,
+    "gap_pct": 2.2,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 31.9
   },
   {
     "group": "real",
@@ -137,8 +239,8 @@
     "cost": 11,
     "violations": 0,
     "gap_pct": 0.0,
-    "reload_ok": false,
-    "reload_violations": 2,
+    "reload_ok": true,
+    "reload_violations": 0,
     "time_s": 0.1
   },
   {
@@ -153,9 +255,9 @@
     "cost": 11,
     "violations": 0,
     "gap_pct": 0.0,
-    "reload_ok": false,
-    "reload_violations": 1,
-    "time_s": 9.8
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 10.3
   },
   {
     "group": "real",
@@ -169,8 +271,8 @@
     "cost": 14,
     "violations": 0,
     "gap_pct": 27.3,
-    "reload_ok": false,
-    "reload_violations": 2,
+    "reload_ok": true,
+    "reload_violations": 0,
     "time_s": 0.2
   },
   {
@@ -185,9 +287,9 @@
     "cost": 14,
     "violations": 0,
     "gap_pct": 27.3,
-    "reload_ok": false,
-    "reload_violations": 2,
-    "time_s": 11.2
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 11.3
   },
   {
     "group": "real",
@@ -195,15 +297,15 @@
     "mode": "reschedule",
     "solver": "cpsat",
     "objective": "makespan",
-    "reference_cost": 19,
-    "right_shift_cost": 20,
+    "reference_cost": 20,
+    "right_shift_cost": 21,
     "n_vars": null,
     "status": "ok",
-    "cost": 19,
+    "cost": 20,
     "violations": 0,
     "gap_pct": 0.0,
-    "reload_ok": false,
-    "reload_violations": 2,
+    "reload_ok": true,
+    "reload_violations": 0,
     "time_s": 0.3
   },
   {
@@ -212,16 +314,16 @@
     "mode": "reschedule",
     "solver": "sa",
     "objective": "makespan",
-    "reference_cost": 19,
-    "right_shift_cost": 20,
-    "n_vars": 563,
+    "reference_cost": 20,
+    "right_shift_cost": 21,
+    "n_vars": 625,
     "status": "ok",
-    "cost": 19,
+    "cost": 20,
     "violations": 0,
     "gap_pct": 0.0,
-    "reload_ok": false,
-    "reload_violations": 1,
-    "time_s": 12.3
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 14.8
   },
   {
     "group": "rolling",
@@ -232,11 +334,11 @@
     "reference_cost": 283,
     "n_vars": null,
     "status": "ok",
-    "cost": 309,
+    "cost": 323,
     "violations": 0,
-    "gap_pct": 9.2,
-    "reload_ok": false,
-    "reload_violations": 1,
+    "gap_pct": 14.1,
+    "reload_ok": true,
+    "reload_violations": 0,
     "time_s": 2.7
   },
   {
@@ -251,8 +353,24 @@
     "cost": 397,
     "violations": 0,
     "gap_pct": 40.3,
-    "reload_ok": false,
-    "reload_violations": 1,
-    "time_s": 185.2
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 187.3
+  },
+  {
+    "group": "rolling",
+    "case": "roll_15x6",
+    "mode": "rolling",
+    "solver": "cpsat",
+    "objective": "sum_completion",
+    "reference_cost": 550,
+    "n_vars": null,
+    "status": "ok",
+    "cost": 591,
+    "violations": 0,
+    "gap_pct": 7.5,
+    "reload_ok": true,
+    "reload_violations": 0,
+    "time_s": 65.2
   }
 ]

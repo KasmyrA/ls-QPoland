@@ -1,0 +1,16 @@
+{
+  "group": "real",
+  "case": "5x5",
+  "mode": "plan",
+  "solver": "sa",
+  "objective": "makespan",
+  "reference_cost": 40,
+  "n_vars": 1012,
+  "status": "ok",
+  "cost": 46,
+  "violations": 0,
+  "gap_pct": 15.0,
+  "reload_ok": true,
+  "reload_violations": 0,
+  "time_s": 57.3
+}
